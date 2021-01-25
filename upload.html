@@ -1,0 +1,93 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Upload</title>
+
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        input, select {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="index.html" class="active-nav">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <h1 id='title'>Student Project Showcase</h1>
+
+    <div style='width: 70%; margin:auto;'>
+        <span class='custom-button' onclick="location.href='search.html'">Back</span>
+
+        <div style="padding: 20px">(login page not shown in this demo)
+        </div>
+
+        <br><br>
+        <span class='title'>Upload Page</span>
+        <br>
+        <table style="width: 100%; font-size: 20px;">
+            <tr>
+                <td class='panel' width=40%>
+                    <label for="classes">Select class:</label>
+
+                    <select name="class" id="classes">
+                        <option value="c1">Class 1</option>
+                        <option value="c2">Class 2</option>
+                        <option value="c3">Class 3</option>
+                        <option value="c4">Class 4</option>
+                    </select>
+                    <br><br>
+                    Visibility:
+                    <input type="radio" id="Private" name='vis' checked>
+                    <label for="Private">Private</label>
+                    <input type="radio" id="All" name='vis'>
+                    <label for="All">All</label>
+
+                    <br><br>
+                    <label for="students">Select Student:</label>
+
+                    <select name="students" id="students">
+                        <option value="c1">Student 1</option>
+                        <option value="c2">Student 2</option>
+                        <option value="c3">Student 3</option>
+                        <option value="c4">Student 4</option>
+                    </select>
+                    <br><br>
+                    Select files to upload:...
+                    <input type="button" value="Upload...">
+                    <br><br>
+                    Select cover image:...
+                    <input type="button" value="Upload...">
+                </td>
+                <td class='panel'>
+                    Input title:
+
+                    <input type="text" value="asdf">
+                    <br>
+                    Input description:
+                    <div contenteditable style="background-color: white; border: 1px solid black">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                        deserunt mollit anim id est laborum.
+                    </div>
+                    <br>
+                    <input type="button" value="Submit!">
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</body>
+
+</html>

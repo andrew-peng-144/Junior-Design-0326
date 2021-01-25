@@ -1,0 +1,51 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Search Results for: [QUERY] </title>
+
+    <link rel="stylesheet" href="main.css">
+
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="index.html" class="active-nav">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="upload.html" style='float: right;'>Instructor Login</a>
+    </div>
+    <h1 id='title'>Student Project Showcase</h1>
+    <div style='width: 70%; margin:auto;'>
+        <span class='custom-button' onclick="location.href='index.html'">Back</span>
+        <br><br>
+        <span class='subheading'>Search Results for: [QUERY] </span>
+        <div class='center-panel'>
+
+            <div class='search-result'>Project 1 <br> by Student...</div>
+            <div class='search-result'>Project 2 <br> by Student...</div>
+            <div class='search-result'>Project 3 <br> by Student...</div>
+            <div class='search-result sr-student'>Student 1 <br> Bio...</div>
+            <div class='search-result sr-student'>Student 2 <br> Bio...</div>
+            <div class='search-result'>Project 4 <br> by Student...</div>
+
+            <script>
+                //all search results are links to the page
+                all_results = document.querySelectorAll(".search-result");
+                all_results.forEach(element => {
+                    let dest = "project.html";
+                    if (element.classList.contains("sr-student")) {
+                        dest = "student.html";
+                    }
+                    element.addEventListener('click', function () { window.location.href = dest; })
+                });
+            </script>
+        </div>
+
+    </div>
+</body>
+
+</html>
