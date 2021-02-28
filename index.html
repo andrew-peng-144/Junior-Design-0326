@@ -1,175 +1,24 @@
-<!doctype html>
-
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--
+        Redirect to index.php.
+    -->
 
 <head>
-    <meta charset="utf-8">
-
-    <title>CGA Student Project Showcase</title>
-    <meta name="description"
-        content="A showcase of student projects from the free Shakespeare course provided by Common Good Atlanta.">
-    <meta name="author" content="Gatech Junior Design Team SLS-0326">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="main.css">
     <style>
-
-
+        div {
+            margin-top: 200px;
+            text-align: center;
+        }
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
     </style>
-
+    <title>Redirecting....</title>
+    <meta http-equiv = "refresh" content = "0; url = index.php" />
 </head>
 
 <body>
-    <div class="topnav">
-        <a href="index.html" class="active-nav">Home</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        <a href="sample/index.html">SAMPLE</a>
-        <a href="upload.html" style='float: right;'>Instructor Login</a>
-    </div>
-    <h1 id='title'>Student Project Showcase</h1>
-
-    <div style='width: 70%; margin:auto;'>
-        <p>
-            Welcome! Here you can find student projects from the Shakespeare literary course
-            hosted by Common Good Atlanta.
-        </p>
-
-        <p style='text-align: center;'>
-            You can search any project or click on any Featured project below.
-        </p>
-
-        <div id='homepage-search-wrapper'>
-
-            <input class='search-bar' type="text" placeholder="Search...">
-            <span class='custom-button' onclick="location.href ='search.html';"> <i class="fa fa-search"></i> </span>
-
-            <span class='custom-button' onclick=filters_dropdown_onclick()>Filters</span>
-
-
-        </div>
-
-        <div class='filter-panel' style="display:none;">
-            Sort by:
-            <input type="radio" id="Alphabetical" name='sort' checked>
-            <label for="Alphabetical">Alphabetical</label>
-            <input type="radio" id="Date" name='sort'>
-            <label for="Date">Date</label>
-            <br>
-            Has Media Type:
-            <input type="checkbox" id="Videos" checked>
-            <label for="Videos">Videos</label>
-            <input type="checkbox" id="Images" checked>
-            <label for="Images">Images</label>
-        </div>
-
-        <br>
-        <div id='featured-section'>
-            <a class='featured-prev' onclick="prevSlide()">&#10094;</a>
-            <a class='featured-next' onclick="nextSlide()">&#10095;</a>
-
-            <div class='featured-slide'>
-                <div class='featured-caption'>Featured Project 1</div>
-                <div class='author'>
-                    by Student...
-                </div>
-                <div class=''>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                    ut labore et...
-                </div>
-                <img src="images/img1.png">
-
-            </div>
-            <div class='featured-slide'>
-                <div class='featured-caption'>Featured Project 2</div>
-                <div class='author'>
-                    by Student...
-                </div>
-                <div class=''>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                    ut labore et...
-                </div>
-                <img src="images/img2.png">
-            </div>
-            <div class='featured-slide'>
-                <div class='featured-caption'>Featured Project 3</div>
-                <div class='author'>
-                    by Student...
-                </div>
-                <div class=''>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                    ut labore et...
-                </div>
-                <img src="images/img3.png">
-            </div>
-            <div class='featured-slide'>
-                <div class='featured-caption'>Featured Project 4</div>
-                <div class='author'>
-                    by Student...
-                </div>
-                <div class=''>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                    ut labore et...
-                </div>
-                <img src="images/img4.png">
-            </div>
-
-
-
-            <script>
-                //Script for slide display
-
-                //set 1st project to be visible
-                var proj1 = document.querySelector("#featured-section .featured-slide");
-                proj1.style.display = 'block';
-
-                var slides = document.querySelectorAll("#featured-section .featured-slide");
-
-                var total_featured = slides.length;
-
-                var currentSlide = 0;
-                function nextSlide() {
-                    if (currentSlide < total_featured - 1) {
-                        currentSlide++;
-                    }
-                    gotoSlide(currentSlide);
-                }
-                function prevSlide() {
-                    if (currentSlide > 0) {
-                        currentSlide--;
-                    }
-                    gotoSlide(currentSlide);
-                }
-                //input: index of which slide to goto
-                function gotoSlide(index) {
-
-
-                    for (let i = 0; i < total_featured; i++) { //set all other slides to hidden
-                        slides[i].style.display = "none";
-                    }
-                    console.log(slides);
-                    console.log(index);
-                    slides[index].style.display = 'block'; //then only show the selected slide
-                }
-            </script>
-        </div>
-    </div>
-    <script>
-        //script for show/hide the filter panel.
-        var search_wrapper = document.getElementById("homepage-search-wrapper");
-        var panel = document.querySelector(".filter-panel")
-
-
-        function filters_dropdown_onclick() {
-            //toggle between showing and hiding the filter panel.
-            if (panel.style.display === "none") {
-                panel.style.display = "block";
-            } else {
-                panel.style.display = "none";
-            }
-        }
-
-    </script>
+    
 </body>
-
 </html>
