@@ -71,10 +71,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     $general_err = "Invalid Login";
                 }
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                $general_err = "Something went wrong. Please try again later";
             }
             // Close prepared statement
            $stmt->close();
+        } else {
+            $general_err = "Oops! Something went wrong.";
         }
         
         $conn->close();
@@ -97,7 +99,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
     <h2>Login</h2>
-    <p>If you are not an administrator, you are not supposed to be on this page. Click <a href="index.html">here</a> to go back.</p>
+    <p>If you are not an administrator, you are not supposed to be on this page. Click <a href="../index.html">here</a> to go back.</p>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="">
             <label>Username</label>

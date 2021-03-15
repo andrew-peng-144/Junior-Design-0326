@@ -11,16 +11,8 @@ if (!isset($_SESSION["administrator"]) || $_SESSION["administrator"] !== true) {
     header("location: ./admin-login.php");
     exit;
 }
+include "./mysql-root-connect.php";
 
-//mysql root access
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "cga_showcase";
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 $error = "";
 $success = "";
 $upload_status = ""; //for project files
@@ -38,20 +30,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST["students"] === "NEW_STUDENT") {
         $ln_in = trim($_POST["new-student-ln"]); //inputted last name
         $fn_in = trim($_POST["new-student-fn"]); //inputted first name
+        $bio_in = trim($_POST["new-student-bio"]);
         if (empty($ln_in) || empty($fn_in)) {
-            $error = "Must fill both first and last name. Project not submitted.";
+            $error = "Must fill both first and last name, or select an existing student. Project not submitted.";
             goto end;
         }
+
         $stmt = $conn->prepare("INSERT INTO students (last_name, first_name, path_to_portrait, path_to_bio) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $ln, $fn, $p2p, $p2b);
         $ln = $ln_in;
         $fn = $fn_in;
-        $p2p = "data/home/default_portrait.PNG"; //default paths first, relative to homepage.
-        $p2b = "data/home/default_bio.txt";
+        $p2p = "data/home/default_portrait.PNG"; //default portrait path, relative to homepage.
+        $p2b = "data/home/default_bio.txt"; //default bio path first.
         $stmt->execute();
         $stmt->close();
         //need student id
         $student_id = $conn->insert_id; //gets the autoincremented id of the prev query
+
+        //Now create bio.txt if the bio entry was not empty
+        if (!empty($bio_in)) {
+            $folder = "../data/stu/" . $student_id;
+            if (!is_dir($folder)) {
+                // dir doesn't exist, make it
+                mkdir($folder);
+            }
+            file_put_contents($folder . "/bio.txt", $bio_in);
+
+            $sql = "UPDATE students SET path_to_bio=\"" . "data/stu/" . $student_id . "/bio.txt" . "\" WHERE student_id=" . $student_id;
+
+            if ($conn->query($sql) === TRUE) {
+            }
+        }
 
         $success = "Student added.";
     } else {
@@ -85,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //for each possible upload, up to 3
     for ($i = 1; $i <= 3; $i++) {
 
-        if (isset($_FILES['uploaded_file_'.$i])) {
+        if (isset($_FILES['uploaded_file_' . $i])) {
 
             /////////////////  PROJECT FILES (up to 3)
 
@@ -100,12 +109,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mkdir($folder);
             }
 
-            $tmpFilePath = $_FILES['uploaded_file_'.$i]['tmp_name'];
+            $tmpFilePath = $_FILES['uploaded_file_' . $i]['tmp_name'];
             if ($tmpFilePath != "") {
-                $target_file = $folder . "/" . basename($_FILES["uploaded_file_".$i]["name"]);
+                $target_file = $folder . "/" . basename($_FILES["uploaded_file_" . $i]["name"]);
                 //Upload the file into the temp dir
                 if (move_uploaded_file($tmpFilePath, $target_file)) {
-                    $filename = htmlspecialchars(basename($_FILES["uploaded_file_".$i]["name"]));
+                    $filename = htmlspecialchars(basename($_FILES["uploaded_file_" . $i]["name"]));
                     $upload_status .= "The file " . $filename . " has been uploaded. <br>";
 
                     //create project_files entry
@@ -152,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Check if $uploadOk is set to 0 by an error
         if ($uploadOk == 0) {
-            $upload_status_ci = "Sorry, your file was not uploaded.";
+            //$upload_status_ci = "Sorry, your file was not uploaded.";
             // if everything is ok, try to upload file
         } else {
             if (move_uploaded_file($_FILES["uploaded_image"]["tmp_name"], $target_file)) {
@@ -248,6 +257,9 @@ end:
         <label>New Student last name:</label>
         <input type="text" name="new-student-ln" id="ln-txt" value=<?php echo isset($_POST['new-student-ln']) ? htmlspecialchars($_POST['new-student-ln']) : "" ?>>
         <br>
+        <label>New Student bio:</label>
+        <input type="text" name="new-student-bio" id="bio-txt" value=<?php echo isset($_POST['new-student-bio']) ? htmlspecialchars($_POST['new-student-bio']) : "" ?>>
+        <br>
 
 
 
@@ -298,14 +310,17 @@ end:
         var stu = document.getElementById("stu-sel");
         var fn = document.getElementById("fn-txt");
         var ln = document.getElementById("ln-txt");
+        var bio = document.getElementById("bio-txt");
 
         function stu_onchange() {
             if (stu.value === "NEW_STUDENT") {
                 fn.disabled = false;
                 ln.disabled = false;
+                bio.disabled = false;
             } else {
                 fn.disabled = true;
                 ln.disabled = true;
+                bio.disabled = true;
             }
         }
     </script>

@@ -1,11 +1,4 @@
 <?php
-//homepage but search actually works and featured actually grabs from db.
-
-//attempt to login to db at the very beginning, in order to show the featured work.
-
-//then in search bar, upong clicking search, run the query, then display the results on search.php page.
-
-
 
 //check if admin
 session_start();
@@ -116,56 +109,48 @@ EOF;
         <span class='custom-button' onclick="window.location.href='list-projects.php'">List of Projects</span>
         <br>
         <div id='featured-section'>
-            <h1>Featured Projects! (TODO)</h1>
+            <h1>Featured Projects!</h1>
             <a class='featured-prev' onclick="prevSlide()">&#10094;</a>
             <a class='featured-next' onclick="nextSlide()">&#10095;</a>
 
+            <?php
+            //attempt to login to db to display all featured works.
+            include 'mysql-connect.php';
+            //select featured projects info, and also grab names of authors (using inner join)
+            $sql = 'SELECT project_id, path_to_description, title, private, featured, path_to_cover_image, students.student_id, students.first_name, students.last_name from projects INNER JOIN students on projects.student_id=students.student_id and projects.featured=1';
 
-            <div class='featured-slide'>
-                <div class='featured-caption'> <a href="project-jshelley-1.html">"A Sonnet to Typos"</div></a>
-                <div class='author'>
-                    by <a href="student-jshelley.html">Jonathan Shelley</a>
-                </div>
-                <div>
-                    <i>No description available.</i>
-                </div>
-                <img src="./data/home/img1.png">
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                // make a featured slide for each row.
+                while ($row = $result->fetch_assoc()) {
+            ?>
+                    <div class='featured-slide'>
+                        <div class='featured-caption'> <a href="project.php?id=<?php echo $row['project_id'] ?>"> <?php echo $row['title'] ?> </div></a>
+                        <div class='author'>
+                            by <a href="student.php?id=<?php echo $row['student_id'] ?>"> <?php echo $row['first_name'] . " " . $row['last_name'] ?> </a>
+                        </div>
+                        <div>
+                            <i>
 
-            </div>
-            <div class='featured-slide'>
-                <div class='featured-caption'> <a href="project-jshelley-2.html">"Ode to an Orchid"</div></a>
-                <div class='author'>
-                    by <a href="student-jshelley.html">Jonathan Shelley</a>
-                </div>
-                <div>
-                    <i>No description available.</i>
-                </div>
-                <img src="./data/home/img2.png">
-            </div>
-            <div class='featured-slide'>
-                <div class='featured-caption'> <a href="project-jshelley-3.html"> Intro to Poetic Meter, Fall 2020</div>
-                </a>
-                <div class='author'>
-                    by <a href="student-jshelley.html">Jonathan Shelley</a>
-                </div>
-                <div>
-                    <i>No description available.</i>
-                </div>
-                <img src="./data/home/img3.png">
-            </div>
-            <div class='featured-slide'>
-                <div class='featured-caption'> <a href="project-mclark-1.html">Final essay Shakespeare</div></a>
-                <div class='author'>
-                    by <a href="student-mclark.html">Michael Clark</a>
-                </div>
-                <div>
-                    <i>No description available.</i>
-                </div>
-                <img src="./data/home/img4.png">
-            </div>
+                                <?php
+                                //read from description text file.
+                                $myfile = fopen($row['path_to_description'], "r") or die("Unable to open file!");
+                                echo fread($myfile, filesize($row['path_to_description']));
+                                fclose($myfile);
+                                ?>
 
+                            </i>
+                        </div>
+                        <img src=<?php echo $row['path_to_cover_image']?> alt="Cover image.">
 
+                    </div>
+            <?php
+                }
+            } else {
+                echo "No featured projects, or there was an error.";
+            }
 
+            ?>
             <script>
                 //Script for slide display
 
