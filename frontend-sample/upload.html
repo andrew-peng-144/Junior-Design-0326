@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="css/upload.css">
+  <link rel="stylesheet" href="css/topnav.css">
+  <title>Hello, world!</title>
+</head>
+
+<body>
+
+
+  <!--TOPNAV-->
+  <div class="topnav">
+    <div class="container-fluid">
+      <div class="col-sm-6">
+        <div class="cgaprojects">CGA Student Projects </div>
+      </div>
+      <div class="col-sm-4">
+        <a href="sample/index.html">Sample</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <a href="index.html" class="active-nav">Home</a>
+      </div>
+      <div class="col-sm-2">
+        <div class="instuctorbutton">
+          <a href="upload.html">Instructor Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--END TOPNAV-->
+
+
+  <div class="jumbotron vertical-center">
+
+    <div class="container">
+      <div class="header">
+        <h1>Upload Project</h1>
+      </div>
+      <form class="row row-cols-lg-auto g-3 align-items-center">
+        <div class="col-12">
+          <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
+          <select class="form-select" id="inlineFormSelectPref">
+            <option selected>Class</option>
+            <option value="1">Class 1</option>
+            <option value="2">Class 2</option>
+            <option value="3">Class 3</option>
+          </select>
+        </div>
+
+
+        <div class="col-12">
+          <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
+          <select class="form-select" id="inlineFormSelectPref">
+            <option selected>Student</option>
+            <option value="1">Neil</option>
+            <option value="2">Andrew</option>
+            <option value="3">Simo</option>
+            <option value="3">Lindsay</option>
+            <option value="3">Jake</option>
+            <option value="3">Mason</option>
+          </select>
+        </div>
+
+
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Private Project</label>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Featured Project</label>
+          </div>
+        </div>
+
+
+      </form>
+
+      <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Project Title</label>
+        <input type="email" class="form-control" id="exampleFormControlInput1">
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Project Description</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="formFile" class="form-label">Project Cover Image</label>
+        <input class="form-control" type="file" id="formFile">
+      </div>
+      <div class="mb-3">
+        <label for="formFileMultiple" class="form-label">Project Files</label>
+        <input class="form-control" type="file" id="formFileMultiple" multiple>
+      </div>
+
+      <div class="d-grid gap-2 col-6 mx-auto">
+        <button type="button" class="btn btn-light">Submit</button>
+      </div>
+
+
+
+      <!-- Optional JavaScript; choose one of the two! -->
+
+      <!-- Option 1: Bootstrap Bundle with Popper -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        crossorigin="anonymous"></script>
+
+      <!-- Option 2: Separate Popper and Bootstrap JS -->
+      <!--
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+      -->
+    </div>
+  </div>
+
+</body>
+
+</html>

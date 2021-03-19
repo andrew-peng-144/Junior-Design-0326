@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title> CGA Administrator Login</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/loginstylesheet.css">
+	<link rel="stylesheet" href="css/topnav.css">
+</head>
+
+<body>
+
+	<!--TOPNAV-->
+	<div class="topnav">
+		<div class="container-fluid">
+			<div class="col-sm-6">
+				<div class="cgaprojects">CGA Student Projects </div>
+			</div>
+			<div class="col-sm-4">
+				<a href="sample/index.html">Sample</a>
+				<a href="#contact">Contact</a>
+				<a href="#about">About</a>
+				<a href="index.html" class="active-nav">Home</a>
+			</div>
+			<div class="col-sm-2">
+				<div class="instuctorbutton">
+					<a href="upload.html">Instructor Login</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--END TOPNAV-->
+
+
+	<div class="loginBox">
+		<header>
+			<div class="cgaLogo">
+				<center><img
+						src="https://images.squarespace-cdn.com/content/53d77c9fe4b0ba978ec7d308/1562689446252-ZS0QBUSLYUWHYH1AQ028/unnamed.png?format=1000w&content-type=image%2Fpng">
+				</center>
+			</div>
+			<p class="loginHead" align="center">Administrator Login</p>
+		</header>
+		<form action="loginVerification.php" method="post" class="login-form">
+			<div class="textField">
+				<input class="userName" type="text" name="userName" placeholder="Username">
+			</div>
+			<div class="textField">
+				<input class="password" type="password" name="password" placeholder="Password">
+			</div>
+			<hr class="hrline">
+			<div class="button">
+				<input class="loginButton" type="submit" name="submit" value="Log In">
+			</div>
+		</form>
+	</div>
+</body>
+
+</html>
