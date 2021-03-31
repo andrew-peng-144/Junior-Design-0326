@@ -17,8 +17,6 @@ p {
 
 body {
 	background-color: #white;
-	margin-left: 1.66%;
-	margin-right: 1.66%;
 }
 
 a, a:hover, a:focus, a:active{
@@ -42,3 +40,7 @@ a, a:hover, a:focus, a:active{
 	text-align: center;
 }
 
+#profile {
+	margin-left: 10%;
+	margin-right: 10%;
+}
