@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 
 
-//only admins allowed:
+//only admins allowed: (very important or else anyone can connect to root!)
 if(!isset($_SESSION)) 
 { 
     session_start(); 

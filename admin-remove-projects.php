@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         //Remove the project's records from the projects table and the project_files table.
-        $sql = "DELETE projects, project_files from projects inner join project_files on projects.project_id=project_files.project_id where projects.project_id=" . $pid;
+        $sql = "DELETE projects, project_files from projects left join project_files on projects.project_id=project_files.project_id where projects.project_id=" . $pid;
         if ($conn->query($sql) === TRUE) {
             echo "Record deleted successfully";
         } else {
@@ -71,6 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //
 }
+
+
+include "get-topnav.php";
 ?>
 
 
@@ -81,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php
     //list all projects and have a checkbox next to each.
 
-    include '../mysql-connect.php';
+    include 'mysql-connect.php';
 
     $sql = "SELECT project_id, title, path_to_description, students.first_name, students.last_name FROM projects "
         . "LEFT JOIN students ON projects.student_id=students.student_id"; //LEFT JOIN will still list projects whose author isn't in the database for some reason.
@@ -93,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ?>
             <input type="checkbox" name="p<?php echo $pid ?>" id="p<?php echo $pid ?>">
             <label for="p<?php echo $pid ?>">
-                <?php echo '#' . $pid . " " . htmlspecialchars($row['title']) . "by" . htmlspecialchars($row['first_name']) . " " . htmlspecialchars($row['last_name']) ?>
+                <?php echo '#' . $pid . " " . htmlspecialchars($row['title']) . " by " . htmlspecialchars($row['first_name']) . " " . htmlspecialchars($row['last_name']) ?>
             </label>
             <br>
 
@@ -105,3 +108,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ?>
     <input type="submit" value="Submit">
 </form>
+
+<?php include "get-footer.php"?>

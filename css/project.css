@@ -1,0 +1,72 @@
+h6 {
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	margin-top: 1.66%;
+	font-size: 30px;
+	font-weight: 700;
+	text-transform: uppercase;
+	padding-bottom: 20px;
+	border-bottom: 2px solid rgba(0,0,0,0.1);
+	color: #353940;
+}
+
+p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #353940;
+}
+
+body {
+    background-color: white;
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+    color: #353940;
+    text-decoration: none;
+}
+
+#edit-button {
+    float:right; font-size: 20px; background-color:#FF5335; border-radius: 10px; padding: 10px; cursor: pointer;
+}
+
+#cover-image {
+    /* width: 250px; */
+    border: 3px solid rgb(0,0,0,0.1);
+}
+
+#project {
+    margin-left: 10%;
+	margin-right: 10%;
+}
+.project-description {
+    margin-top:10px;
+}
+/* #project-body {
+    
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 15px;
+    border-collapse: separate;
+    border-spacing: 50px 15px;
+} */
+
+
+/* #project-list>div {
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid rgba(0,0,0,0.125);
+    border-radius: 15px;
+}
+
+#project-list>div:hover {
+    background-color: gray;
+    transition: 0.5s;
+} */
+
+#download-btn {
+    background-color: #ff5335;
+    border-radius: 10px;
+    padding: 10px;
+    width: 40%;
+}

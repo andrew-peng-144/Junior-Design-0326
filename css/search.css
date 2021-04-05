@@ -1,0 +1,10 @@
+.truncated-description {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 12px;
+}
+a {
+    color: #353940;
+    text-decoration: none;
+}

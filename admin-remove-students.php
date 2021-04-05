@@ -77,7 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         //For each project that the student made, remove the project's records from the projects table and the project_files table.
-        $sql = "DELETE projects, project_files from projects inner join project_files on projects.project_id=project_files.project_id where projects.student_id=" . $sid;
+        $sql = "DELETE projects, project_files from projects left join project_files on projects.project_id=project_files.project_id where projects.student_id=" . $sid;
+        //LEFT JOIN is needed incase a project has no files.
         if ($conn->query($sql) === TRUE) {
             echo "Record deleted successfully";
         } else {
@@ -95,8 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //
 }
-?>
 
+include "get-topnav.php";
+?>
+    <a href="index.php">Home</a>
 
 <h1>Select student(s) to remove.</h1>
 <h3>Note that all their projects and files will also be removed.</h3>
@@ -105,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php
     //list all students and have a checkbox next to each.
 
-    include '../mysql-connect.php';
+    include 'mysql-connect.php';
 
     $sql = "SELECT student_id, first_name, last_name FROM students";
     $result = $conn->query($sql);
@@ -128,3 +131,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ?>
     <input type="submit" value="Submit">
 </form>
+
+<?php include "get-footer.php"?>

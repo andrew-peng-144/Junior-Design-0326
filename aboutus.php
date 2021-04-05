@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <title> CGA Administrator Login</title>
+  <meta charset="utf-8">
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"> -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"> -->
+
+  <!-- Optional theme -->
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous"> -->
+
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script> -->
+
+  <style>
+    body {
+      font: 400 15px Verdana, sans-serif;
+      line-height: 1.8;
+      color: #818181;
+    }
+
+    h2 {
+      font-size: 24px;
+      text-transform: uppercase;
+      color: #353940;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    h4 {
+      font-size: 19px;
+      line-height: 1.375em;
+      color: #353940;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+
+    .container-fluid {
+      padding: 60px 50px;
+    }
+
+    .bg-grey {
+      background-color: #f6f6f6;
+    }
+
+    .logo {
+      color: #f4511e;
+      font-size: 200px;
+    }
+
+    .myButton {
+      box-shadow: 0px 10px 14px -7px #b59691;
+      background: linear-gradient(to bottom, #ff5335 5%, #ff5335 100%);
+      background-color: #ff5335;
+      border-radius: 8px;
+      display: inline-block;
+      cursor: pointer;
+      color: #ffffff;
+      font-family: Arial;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 13px 32px;
+      text-decoration: none;
+      text-shadow: 0px 1px 0px #802416;
+    }
+
+    .myButton:hover {
+      background: linear-gradient(to bottom, #ff5335 5%, #ff5335 100%);
+      background-color: #ff5335;
+    }
+
+    .myButton:active {
+      position: relative;
+      top: 1px;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    @media screen and (max-width: 768px) {
+      .col-sm-4 {
+        text-align: center;
+        margin: 25px 0;
+      }
+
+      .btn-lg {
+        width: 100%;
+        margin-bottom: 35px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .logo {
+        font-size: 150px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <?php
+    include "get-topnav.php";
+  ?>
+
+  <div id="about" class="container-fluid">
+    <div class="row">
+      <div class="col-sm-8">
+        <h2>About Us </h2><br>
+        <h4>This webpage is dedicated to showing off the works of Common Good Atlanta students. It acts as a platform for
+          students to display their projects that they have worked on through out the span of their Shakespeare course.
+        </h4><br>
+        <p>What is Common Good Atlanta? Common Good Atlanta provides incarcerated people and formerly incarcerated people
+          with broad, democratic access to higher education so they can develop a better understanding of both themselves
+          and the societal forces at work around them. </p>
+        <br><button class="btn myButton btn-lg">Get in Touch</button>
+      </div>
+      <div class="col-sm-4">
+        <img src="data/home/cgalogo.png">
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid bg-grey">
+    <div class="row">
+      <div class="col-sm-4">
+        <img src="data/home/shakespeare.png">
+      </div>
+      <div class="col-sm-8">
+        <h2>About Our Shakespeare Course </h2><br>
+        <h4><strong>MISSION:</strong> INSERT SHAKEPEARE COURSE DESCRIPTION: Our mission lorem ipsum dolor sit amet,
+          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+          veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</h4><br>
+        <p><strong>VISION:</strong> Our vision Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+          laboris nisi ut aliquip ex ea commodo consequat.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="services" class="container-fluid text-center">
+    <h2>CONTACT US</h2>
+    <h4>Email: abc1234@gmail.com</h4>
+    <p>If you have any questions please feel free to reach out to us. Our goal is to create an online presence for the
+      Common Good Atlanta students, and we want to help them engage with the community.</p>
+    <br>
+  </div>
+
+  <?php
+    include "get-footer.php";
+  ?>
+</body>
+
+</html>

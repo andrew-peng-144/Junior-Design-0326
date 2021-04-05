@@ -1,0 +1,46 @@
+/* Set a background image by replacing the URL below */
+body {
+  font-family: Verdana, Geneva, sans-serif;
+  background-image: url("whitebackground.jpg");
+  background-color: white;
+}
+
+
+* {
+   color: white;
+}
+a {
+  color: default;
+}
+
+.vertical-center {
+  /* min-height: 100%;  Fallback for browsers do NOT support vh unit */
+  /* min-height: 100vh; These two lines are counted as one :-)       */
+  margin-top: 50px;
+
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  width: 700px;
+  margin: auto;
+
+  background-color: #6495ED;
+
+  padding-top: 20px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+  padding-left: 30px;
+  border-radius: 25px;
+
+}
+
+.header {
+  padding-bottom: 1px;
+  border-radius: 25px;
+  padding-top: 25px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 900;
+}

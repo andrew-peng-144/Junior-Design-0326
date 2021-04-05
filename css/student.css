@@ -1,0 +1,48 @@
+h6 {
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	margin-top: 1.66%;
+	font-size: 30px;
+	font-weight: 700;
+	text-transform: uppercase;
+	padding-bottom: 20px;
+	border-bottom: 2px solid rgba(0,0,0,0.1);
+	color: #353940;
+}
+
+p {
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	color: #353940;
+}
+
+body {
+	background-color: #white;
+}
+
+a, a:hover, a:focus, a:active{
+	color: #353940;
+	text-decoration: none;
+}
+
+#Profile_Picture{
+	width: 250px;
+	border: 3px solid rgb(0,0,0,0.1);
+}
+
+#User_bio{
+	margin-top: 10px;
+}
+
+.Project_List {
+	margin-top: 1%;
+	margin-bottom: 1%;
+	text-align: center;
+}
+
+#profile {
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+#edit-button {
+    float:right; font-size: 20px; background-color:#FF5335; border-radius: 10px; padding: 10px; cursor: pointer;
+}
