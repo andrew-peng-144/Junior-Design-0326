@@ -1,4 +1,8 @@
 <?php
+//NEED TO GENERATE HASH FOR PASSWORD
+//BECAUSE WE'RE MANUALLY INSERTING ADMIN CREDENTIALS.
+
+
 //FOR CGA SHOCASE:
 //username: admintest
 //password: passwordtesting123 (hashed to $2y$10$39YNjfOE.GG5rSuuE4aVJ.lVpg/tUZESbTlwIqbZUX4KxESKrRM.C)

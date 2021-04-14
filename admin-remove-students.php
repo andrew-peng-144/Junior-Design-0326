@@ -1,4 +1,5 @@
 <?php
+//Page for admins to remove students. They are shown a list of all students and they just select which ones to remove then submit.
 
 error_reporting(E_ALL);
 //only admins allowed:
@@ -8,8 +9,9 @@ if (!isset($_SESSION["administrator"]) || $_SESSION["administrator"] !== true) {
     exit;
 }
 
-function deleteDir($dirPath) {
-    if (! is_dir($dirPath)) {
+function deleteDir($dirPath)
+{
+    if (!is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");
     }
     if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
@@ -29,9 +31,7 @@ function deleteDir($dirPath) {
 
 //On form submit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include "./mysql-root-connect.php";
-    // isset($_POST['s1']);
-    //echo print_r($_POST);
+    include "./admin-mysql-connect.php";
 
     //for each student:
     foreach ($_POST as $key => $val) {
@@ -44,45 +44,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                //for each student, completely delete its folder.
+                //completely delete the student's folder.
                 //Note that this assumes that the student folder is data/stu/<id>.
-                $dirPath = "../data/stu/" . $row['student_id'];
+                $dirPath = "data/stu/" . $row['student_id'];
                 try {
                     deleteDir($dirPath);
-                    echo 'student folder '.$row['student_id']." deleted.";
+                    echo 'student folder ' . $row['student_id'] . " deleted.";
                 } catch (Exception $e) {
-                    echo 'Folder didnt exist: '.$dirPath;
+                    echo 'Folder didnt exist: ' . $dirPath;
                 }
             }
         }
 
         //Delete the project's folder.
-
         $sql = "SELECT project_id, student_id FROM projects WHERE student_id=" . $sid;
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 //for each project, completely delete its folder.
                 //Note that this assumes that the project folder is data/pro/<id>.
+                $pid = $row['project_id'];
 
-                $dirPath = "../data/pro/" . $row['project_id'];
+                $dirPath = "data/pro/" . $pid;
                 try {
                     deleteDir($dirPath);
-                    echo 'project folder '.$row['project_id']." deleted.";
+                    echo 'project folder ' .  $pid . " deleted.";
                 } catch (Exception $e) {
-                    echo 'Folder didnt exist: '.$dirPath;
+                    echo 'Folder didnt exist: ' . $dirPath;
+                }
+
+
+                //also delete its records from the database.
+
+                //delete the record for the project's files first
+                $sql = "DELETE from project_files where project_files.project_id=" . $pid;
+                if ($conn->query($sql) === TRUE) {
+                    echo "Record deleted successfully";
+                } else {
+                    echo "Error deleting record: " . $conn->error;
+                }
+
+                //delete the project record from database
+                $sql = "DELETE from projects where projects.project_id=" . $pid;
+                if ($conn->query($sql) === TRUE) {
+                    echo "Record deleted successfully";
+                } else {
+                    echo "Error deleting record: " . $conn->error;
                 }
             }
-        }
-
-
-        //For each project that the student made, remove the project's records from the projects table and the project_files table.
-        $sql = "DELETE projects, project_files from projects left join project_files on projects.project_id=project_files.project_id where projects.student_id=" . $sid;
-        //LEFT JOIN is needed incase a project has no files.
-        if ($conn->query($sql) === TRUE) {
-            echo "Record deleted successfully";
-        } else {
-            echo "Error deleting record: " . $conn->error;
         }
 
         //Delete the student record from students table.
@@ -99,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 include "get-topnav.php";
 ?>
-    <a href="index.php">Home</a>
+<a href="index.php">Home</a>
 
 <h1>Select student(s) to remove.</h1>
 <h3>Note that all their projects and files will also be removed.</h3>
@@ -113,7 +122,7 @@ include "get-topnav.php";
     $sql = "SELECT student_id, first_name, last_name FROM students";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
-        // output data of each row
+
         while ($row = $result->fetch_assoc()) {
             $sid = htmlspecialchars($row['student_id'])
     ?>
@@ -132,4 +141,4 @@ include "get-topnav.php";
     <input type="submit" value="Submit">
 </form>
 
-<?php include "get-footer.php"?>
+<?php include "get-footer.php" ?>

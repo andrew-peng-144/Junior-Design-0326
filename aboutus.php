@@ -1,103 +1,14 @@
+<?//The "About Us" page. No PHP, except for including the topnav and footer.?>
+
 <!DOCTYPE html>
 <html lang='en'>
 
 <head>
-  <title> CGA Administrator Login</title>
+  <title>About CGA Project Showcase</title>
   <meta charset="utf-8">
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"> -->
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"> -->
 
-  <!-- Optional theme -->
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous"> -->
-
-  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script> -->
-
-  <style>
-    body {
-      font: 400 15px Verdana, sans-serif;
-      line-height: 1.8;
-      color: #818181;
-    }
-
-    h2 {
-      font-size: 24px;
-      text-transform: uppercase;
-      color: #353940;
-      font-weight: 600;
-      margin-bottom: 30px;
-    }
-
-    h4 {
-      font-size: 19px;
-      line-height: 1.375em;
-      color: #353940;
-      font-weight: 400;
-      margin-bottom: 30px;
-    }
-
-    .container-fluid {
-      padding: 60px 50px;
-    }
-
-    .bg-grey {
-      background-color: #f6f6f6;
-    }
-
-    .logo {
-      color: #f4511e;
-      font-size: 200px;
-    }
-
-    .myButton {
-      box-shadow: 0px 10px 14px -7px #b59691;
-      background: linear-gradient(to bottom, #ff5335 5%, #ff5335 100%);
-      background-color: #ff5335;
-      border-radius: 8px;
-      display: inline-block;
-      cursor: pointer;
-      color: #ffffff;
-      font-family: Arial;
-      font-size: 20px;
-      font-weight: bold;
-      padding: 13px 32px;
-      text-decoration: none;
-      text-shadow: 0px 1px 0px #802416;
-    }
-
-    .myButton:hover {
-      background: linear-gradient(to bottom, #ff5335 5%, #ff5335 100%);
-      background-color: #ff5335;
-    }
-
-    .myButton:active {
-      position: relative;
-      top: 1px;
-    }
-
-    img {
-      width: 100%;
-      height: auto;
-    }
-
-    @media screen and (max-width: 768px) {
-      .col-sm-4 {
-        text-align: center;
-        margin: 25px 0;
-      }
-
-      .btn-lg {
-        width: 100%;
-        margin-bottom: 35px;
-      }
-    }
-
-    @media screen and (max-width: 480px) {
-      .logo {
-        font-size: 150px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="css/aboutus.css">
 </head>
 
 <body>

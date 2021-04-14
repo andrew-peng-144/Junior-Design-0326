@@ -1,4 +1,5 @@
 <?php
+//Page for admins to remove projects. They are shown a list of all projects and they just select which ones to remove then submit.
 
 error_reporting(E_ALL);
 //only admins allowed:
@@ -30,9 +31,7 @@ function deleteDir($dirPath)
 
 //On form submit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include "./mysql-root-connect.php";
-    // isset($_POST['s1']);
-    //echo print_r($_POST);
+    include "./admin-mysql-connect.php";
 
     //for each project:
     foreach ($_POST as $key => $val) {
@@ -41,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $pid = substr($key, 1);
 
         //Delete the project's folder.
-
         $sql = "SELECT project_id, student_id FROM projects WHERE project_id=" . $pid;
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -49,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //for each project, completely delete its folder.
                 //Note that this assumes that the project folder is data/pro/<id>.
 
-                $dirPath = "../data/pro/" . $row['project_id'];
+                $dirPath = "data/pro/" . $row['project_id'];
                 try {
                     deleteDir($dirPath);
                     echo "Project folder ".$pid." deleted.";
@@ -60,8 +58,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
 
-        //Remove the project's records from the projects table and the project_files table.
-        $sql = "DELETE projects, project_files from projects left join project_files on projects.project_id=project_files.project_id where projects.project_id=" . $pid;
+        //delete the database record for the project's files first
+        $sql = "DELETE from project_files where project_files.project_id=" . $pid;
+        if ($conn->query($sql) === TRUE) {
+            echo "Record deleted successfully";
+        } else {
+            echo "Error deleting record: " . $conn->error;
+        }     
+
+        
+        //delete the project record from database
+        $sql = "DELETE from projects where projects.project_id=" . $pid;
         if ($conn->query($sql) === TRUE) {
             echo "Record deleted successfully";
         } else {
@@ -90,7 +97,7 @@ include "get-topnav.php";
         . "LEFT JOIN students ON projects.student_id=students.student_id"; //LEFT JOIN will still list projects whose author isn't in the database for some reason.
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
-        // output data of each row
+
         while ($row = $result->fetch_assoc()) {
             $pid = htmlspecialchars($row['project_id'])
     ?>

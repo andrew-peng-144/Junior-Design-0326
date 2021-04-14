@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
+//If already logged in as admin, just redirect to homepage.
 if (isset($_SESSION["administrator"]) && $_SESSION["administrator"] === true) {
     header("location: index.php");
     exit;
@@ -13,76 +13,57 @@ if (isset($_SESSION["administrator"]) && $_SESSION["administrator"] === true) {
 
 
 $entered_username = $entered_password = "";
-$username_err = $password_err = "";
 $general_err = ""; //an error happened (either wrong username or wrong password) but purposefully vague. will show under login button
-define("INVALID", "Invalid");
 
 // when form is submitted, this whole script will re-run, but will execute below as well:
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // check if username is empty
-    if (trim($_POST["username"]) == false) {
-        $username_err = "Please enter username";
-    } else {
-        $entered_username = $_POST["username"];
-    }
-
-    // check if password is empty:
-    if (trim($_POST["password"]) == false) {
-        $password_err = "Please enter password";
-    } else {
-        $entered_password = $_POST["password"];
-    }
-
-    //if they did enter a username and password:
-    if (empty($username_err) && empty($password_err)) {
-        //THEN, access the database.
+    //if username and password fields are both non-empty:
+    if (
+        !empty(trim(htmlspecialchars($_POST["username"])))
+        && !empty(htmlspecialchars($_POST["password"]))
+    ) {
+        $entered_username = htmlspecialchars($_POST["username"]);
+        $entered_password = htmlspecialchars($_POST["password"]);
+        //login to the database as view-only user.
         require_once "mysql-connect.php";
 
-        //prepared statement
+        //prepared statement to select the admin user
         $sql = "SELECT id, username, password FROM admins WHERE username = ?";
-        //TODO TODO TODO OOOOOOOOOOOOOOOOOO
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("s", $param_username);
-            $param_username = $entered_username;
-
+            $stmt->bind_param("s", $entered_username);
             if ($stmt->execute()) {
-                $stmt->store_result(); //buffers the result of the query, and stmt->fetch puts the results into the binded variables
+                $result = $stmt->get_result();
 
-                //if the username exists in the table
-                if ($stmt->num_rows() == 1) {
-                    $stmt->bind_result($id, $entered_username, $hashed_password);
-
-                    if ($stmt->fetch()) {
-                        if (password_verify($entered_password, $hashed_password)) {
+                if ($result->num_rows == 1) { //should only have 1 record returned.
+                    while ($row = $result->fetch_assoc()) {
+                        if (password_verify($entered_password, $row['password'])) {
                             //Correct password
 
-                            // Store data in session variables
+                            // Store a boolean as session variable called "administrator". This is how an administrator will be tracked.
                             $_SESSION["administrator"] = true;
-
                             header("location: index.php");
                         } else {
-                            //Not using $password_err = "The password you entered was not valid.";
+                            //Wrong password
                             $general_err = "Invalid Login";
                         }
                     }
                 } else {
-                    //Not using $username_err = "No account found with that username.";
+                    //Wrong username (that username wasn't in the table)
                     $general_err = "Invalid Login";
                 }
             } else {
-                $general_err = "Something went wrong. Please try again later";
+                //SELECT query failed somehow
+                $general_err = "Something went wrong. Please try again later"; 
             }
             // Close prepared statement
             $stmt->close();
         } else {
-            $general_err = "Oops! Something went wrong.";
+            //failed to prepare the statement somehow
+            $general_err = "Oops! Something went wrong."; 
         }
 
         $conn->close();
-
-        //(Using mysqli::close() isn't usually necessary,
-        //as non-persistent open links are automatically closed at the end of the script's execution.)
     }
 }
 ?>
@@ -93,22 +74,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <title> CGA Administrator Login</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="css/admin-login-stylesheet.css">
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"> -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/admin-login-stylesheet.css">
 </head>
 
 <body>
-    <?php //include 'topnav.php';
-    //directly output contents of topnav.html
-    $topnav_html = "";
-    $fh = fopen("topnav.html", 'r');
-    while ($line = fgets($fh)) {
-        $topnav_html .= $line;
-    }
-    fclose($fh);
-    echo $topnav_html;
-    //end topnav retrieval
+    <?php
+    include 'get-topnav.php';
     ?>
     <div class="loginBox">
         <header>
@@ -119,16 +91,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </header>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class=login-form>
             <div class="textField">
-                <input class="userName" type="text" name="username" placeholder="Username" value="<?php echo $entered_username; ?>">
+                <input class="userName" type="text" name="username" placeholder="Username" value="<?php echo $entered_username; ?>" required>
             </div>
             <div class="textField">
-                <input class="password" type="password" name="password" placeholder="Password">
+                <input class="password" type="password" name="password" placeholder="Password" required>
             </div>
             <hr class="hrline">
             <div class="button">
                 <input class="loginButton" type="submit" name="submit" value="Log In">
             </div>
         </form>
+        <div>
+            <?php echo $general_err; ?>
+        </div>
     </div>
 
     <?php

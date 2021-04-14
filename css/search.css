@@ -1,3 +1,7 @@
+/*
+This CSS file is used by: search.php, list-projects.php, list-students.php
+*/
+
 .truncated-description {
     white-space: nowrap;
     text-overflow: ellipsis;

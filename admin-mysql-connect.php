@@ -1,9 +1,8 @@
 <?php
+//Connect to the mysql database as an 'admin' user (can INSERT, DELETE, SELECT, and UPDATE the students, projects, project files tables)
+//note that 'admin' user is different from the 'root' user (can do everything)
 
-error_reporting(E_ALL);
-
-
-//only admins allowed: (very important or else anyone can connect to root!)
+//only admins allowed:
 if(!isset($_SESSION)) 
 { 
     session_start(); 
@@ -13,14 +12,18 @@ if (!isset($_SESSION["administrator"]) || $_SESSION["administrator"] !== true) {
     exit;
 }
 
-//mysql root access
+//mysql admin-level access
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "cga-admin";
+$password = "cgatestpassword678";
 $dbname = "cga_showcase";
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+unset($servername);
+unset($username);
+unset($password);
+unset($dbname);
 ?>

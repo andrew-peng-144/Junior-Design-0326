@@ -1,7 +1,11 @@
+/*
+This CSS file is used by: admin-create-student.php, admin-edit-project.php, admin-edit-student.php, admin-upload-project.php
+*/
+
 /* Set a background image by replacing the URL below */
 body {
   font-family: Verdana, Geneva, sans-serif;
-  background-image: url("whitebackground.jpg");
+  background-image: url("data/home/whitebackground.jpg"); /*Background image doesn't work for some reason*/
   background-color: white;
 }
 

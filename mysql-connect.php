@@ -1,5 +1,5 @@
 <?php
-//Connect to the MySQL database as a view-only user. can use the $conn variable.
+//Connect to the MySQL database as a view-only user. Files that include this file can use the $conn variable to refer to the mysqli object.
 
 
 error_reporting(E_ALL);
@@ -21,5 +21,10 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+unset($servername);
+unset($username);
+unset($password);
+unset($dbname);
 
 ?>

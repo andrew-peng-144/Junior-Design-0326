@@ -1,5 +1,5 @@
 <?php
-//project editing page (same idea as student editing page)
+//Project editing page. Given a project ID in the URL, admins input fields in a form to edit data about the project.
 
 error_reporting(E_ALL);
 
@@ -9,7 +9,7 @@ if (!isset($_SESSION["administrator"]) || $_SESSION["administrator"] !== true) {
     header("location: ./admin-login.php");
     exit;
 }
-include "./mysql-root-connect.php";
+include "./admin-mysql-connect.php";
 
 $status_messages = ""; //strings separated by <br>'s, each says what field has been updated after submission
 
@@ -41,11 +41,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //edit project fields
     $title = trim($_POST["title"]); //variable also gets displayed after "Edit Project:"...
-    $feat = isset($_POST["feat"]) ? 1 : 0;
+    $feat = isset($_POST["feat"]) ? 1 : 0; //1=featured, 0=not
     $priv = isset($_POST["priv"]) ? 1 : 0;
     $desc = trim($_POST["description"]);
 
     if (!empty($title)) {
+        //update title
         $stmt = $conn->prepare("UPDATE projects set title=? where project_id=?");
         $stmt->bind_param("si", $title, $project_id);
         $stmt->execute();
@@ -70,7 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $stmt->close();
     if ($feat == 1) {
-
         $status_messages .= "Project is now featured.<br>";
     } else {
         $status_messages .= "Project is now NOT featured.<br>";
@@ -82,94 +82,128 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $stmt->close();
     if ($priv == 1) {
-
         $status_messages .= "Project is now private.<br>";
     } else {
         $status_messages .= "Project is now NOT private.<br>";
     }
 
 
-    //Now replace all the text in the old description.html with the new desc, if not empty
+    //If new description is not empty, then replace all the text in the old description.txt with the new desc.
     if (!empty($desc)) {
         $folder = "data/pro/" . $project_id;
+        if (!is_dir($folder)) {
+            // project folder doesn't exist, make it
+            mkdir($folder);
+        }
+
         file_put_contents($folder . "/description.txt", ""); //clear the old bio
-        file_put_contents($folder . "/description.txt", $desc);
+        file_put_contents($folder . "/description.txt", $desc); //put in new bio
         $status_messages .= "Description has been updated.<br>";
 
-        //point to description
+        //point to new description
         $sql = "UPDATE projects SET path_to_description=\"" . "data/pro/" . $project_id . "/description.txt" . "\" WHERE project_id=" . $project_id;
 
-        if ($conn->query($sql) === TRUE) {
-        }
+        $conn->query($sql);
     }
 
-    $uploaded = false;
+
     //if cover image was specified, then replace the old one
     if (is_uploaded_file($_FILES['uploaded_image']['tmp_name'])) {
-
-        /////////////////////  PORTRAIT
 
         $folder = "data/pro/" . $project_id;
         $imageFileType = strtolower(pathinfo($_FILES['uploaded_image']['name'], PATHINFO_EXTENSION));
 
-        // $uploadOk = 1;
-
+        if (!is_dir($folder)) {
+            // project folder doesn't exist, make it
+            mkdir($folder);
+        }
 
         // Only allow png files
         if (
             $imageFileType != "png"
         ) {
             $status_messages .= "New cover image must be a PNG image file, so it was not uploaded. <br>";
-            // $uploadOk = 0;
         } else {
             //delete old image at the assumed path
             $target_file = "data/pro/{$project_id}/cover_image.png";
             if (file_exists($target_file)) {
                 unlink($target_file);
             }
-
+            //move the uploaded file into the server's filesystem
             if (move_uploaded_file($_FILES["uploaded_image"]["tmp_name"], $target_file)) {
                 $status_messages .= "The cover image " . htmlspecialchars(basename($_FILES["uploaded_image"]["name"])) . " has been updated.";
                 //point to the new file
                 $sql = "UPDATE projects SET path_to_cover_image=\"" . "data/pro/" . $project_id . "/cover_image.png" . "\" WHERE project_id=" . $project_id;
-                if ($conn->query($sql) === TRUE) {
-                }
+                $conn->query($sql);
             } else {
                 $status_messages .= "Sorry, there was an error uploading the cover image...";
             }
-            $uploaded = true;
+        }
+    }
+
+
+    //if reset-files is checked, then reset the project's files and add in the new ones specified
+    if (isset($_POST['reset-files'])) {
+
+        //if data/pro/<id>/files folder exists
+        $folder = "data/pro/" . $project_id . "/files";
+        if (is_dir($folder)) {
+
+            //delete everything inside '/files' folder
+            $files = glob($folder . '/*'); // get all file names
+            foreach ($files as $file) { // iterate files
+                if (is_file($file)) {
+                    unlink($file); // delete file
+                }
+            }
+
+            //delete '/files' folder itself
+            rmdir($folder);
+            $status_messages .= "This project's \"files\" folder has been deleted. <br>";
         }
 
+        //for each new file, up to 3, put the file into the folder 'data/pro/<id>/files/'
+        //for loop is identical to the file upload scheme in admin-upload-project except for the $status_messages line.
+        for ($i = 1; $i <= 3; $i++) {
 
+            if (is_uploaded_file($_FILES['uploaded_file_' . $i]['tmp_name'])) {
+                ///////////////// UPLOAD PROJECT FILES (up to 3)
 
-        // if ($uploadOk == 1) {
-        //     //convert to png and upload new cover image
-        //     imagepng(imagecreatefromstring(
-        //         file_get_contents($_FILES['uploaded_image']['tmp_name'])
-        //     ), $target_file);
-        //     $uploaded = true;
-        //     $status_messages .= "The new cover image has been updated.";
+                $folder = "data/pro/" . $project_id;
+                if (!is_dir($folder)) {
+                    // project folder doesn't exist, make it
+                    mkdir($folder);
+                }
+                $folder = "data/pro/" . $project_id . "/files";
+                if (!is_dir($folder)) {
+                    // project's files folder doesn't exist, make it
+                    mkdir($folder);
+                }
 
-        //     //point to the new file in SQL
-        //     $sql = "UPDATE projects SET path_to_cover_image=\"" . "data/pro/" . $project_id . "/cover_image.png" . "\" WHERE project_id=" . $project_id;
-        //     if ($conn->query($sql) === TRUE) {
-        //     }
-        // }
+                $tmpFilePath = $_FILES['uploaded_file_' . $i]['tmp_name'];
+                if ($tmpFilePath != "") {
+                    $target_file = $folder . "/" . basename($_FILES["uploaded_file_" . $i]["name"]); //such as: "data/pro/2/files/example.pdf"
+                    //Upload the file into the temp dir
 
-        // // Check if $uploadOk is set to 0 by an error
-        // if ($uploadOk == 0) {
-        // } else {
-        //     if (move_uploaded_file($_FILES["uploaded_portrait"]["tmp_name"], $target_file)) {
-        //         $status_messages .= "The portrait image " . htmlspecialchars(basename($_FILES["uploaded_portrait"]["name"])) . " has been updated.";
-        //     } else {
-        //         $status_messages .= "Sorry, there was an error uploading the portrait image..";
-        //     }
-        //     $uploaded = true;
-        // }
+                    if (move_uploaded_file($tmpFilePath, $target_file)) {
+                        $filename = htmlspecialchars(basename($_FILES["uploaded_file_" . $i]["name"])); //such as: "example.pdf"
+
+                        //status message: the only difference between here and the file upload code snippet in admin-upload-project.php
+                        $status_messages .= "The file " . $filename . " has been uploaded. <br>";
+
+                        //create project_files entry in the table
+                        $stmt = $conn->prepare("INSERT INTO project_files (project_id, path, file_type) VALUES (?,?,?)");
+                        $stmt->bind_param("iss", $project_id, $path, $file_type);
+                        $path = "data/pro/" . $project_id . "/files/" . $filename;
+                        $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                        $stmt->execute();
+                        $stmt->close();
+                    }
+                }
+            }
+        }
     }
 }
-
-end:
 
 ?>
 
@@ -194,7 +228,7 @@ end:
 
 
         <div class="container" style="background-color: #6495ED">
-        
+
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
                 <div class="header">
                     <h1>Edit Project:
@@ -237,12 +271,26 @@ end:
                     <label for="formFile" class="form-label">New Cover Image</label>
                     <input class="form-control" type="file" id="formFile" name="uploaded_image">
                 </div>
-                <!-- <div class="mb-3">
+
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault3" name="reset-files" value="" onclick="toggle()">
+                    <label class="form-check-label" for="flexSwitchCheckDefault3">Reset uploaded files</label>
+                </div>
+                <script>
+                    function toggle() {
+                        //Toggles whether the 3 file inputs are enabled
+                        var inputs = document.getElementsByClassName("new-file");
+                        for (let i = 0; i < inputs.length; i++) {
+                            inputs.item(i).toggleAttribute("disabled");
+                        }
+                    }
+                </script>
+                <div class="mb-3">
                     <label for="formFileMultiple" class="form-label">New Project Files (up to 3)</label>
-                    <input class="form-control" type="file" name="uploaded_file_1">
-                    <input class="form-control" type="file" name="uploaded_file_2">
-                    <input class="form-control" type="file" name="uploaded_file_3">
-                </div> -->
+                    <input class="form-control new-file" type="file" name="uploaded_file_1" disabled>
+                    <input class="form-control new-file" type="file" name="uploaded_file_2" disabled>
+                    <input class="form-control new-file" type="file" name="uploaded_file_3" disabled>
+                </div>
 
                 <div class="d-grid gap-2 col-6 mx-auto">
                     <input type="submit" class="btn btn-light" value="Submit">

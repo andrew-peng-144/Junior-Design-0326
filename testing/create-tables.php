@@ -52,7 +52,7 @@ if ($conn->query($sql) === TRUE) {
 } else {
     echo "Error creating projects table: " . $conn->error . ". ";
 }
-//////Projects_files  (a project can have many downloadable files. Store the paths and ther filetypes here.)
+//////Project_files  (a project can have many downloadable files. Store the paths and ther filetypes here.)
 $sql = "CREATE TABLE project_files (
     file_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     project_id INT NOT NULL,
