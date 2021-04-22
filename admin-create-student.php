@@ -3,14 +3,14 @@
 
 error_reporting(E_ALL);
 
-//only admins allowed:
+//only admins allowed on this page:
 session_start();
 if (!isset($_SESSION["administrator"]) || $_SESSION["administrator"] !== true) {
     header("location: ./admin-login.php");
     exit;
 }
 
-//Connect to the database as 
+//Connect to the database as admin
 include "./admin-mysql-connect.php";
 
 $error = "";
@@ -19,7 +19,7 @@ $upload_status_p = ""; //for portrait
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //if on form submit
+    //if on form submit (form method=post)
 
     //Create entry for new student in students table
     //with default image and empty text file bio.
@@ -28,12 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fn_in = trim($_POST["new-student-fn"]); //inputted first name
     $bio_in = trim($_POST["new-student-bio"]); //inputted bio (not required)
 
+    //prepared statement
     $stmt = $conn->prepare("INSERT INTO students (last_name, first_name, path_to_portrait, path_to_bio) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $ln, $fn, $p2p, $p2b);
-    $ln = $ln_in;
-    $fn = $fn_in;
-    $p2p = "data/home/default_portrait.png"; //default portrait path, relative to homepage.
-    $p2b = "data/home/default_bio.txt"; //default bio path first.
+    $stmt->bind_param("ssss", $ln_in, $fn_in, $p2p, $p2b);
+    $p2p = "data/home/default_portrait.png"; //p2p is "path to portrait": default portrait path, relative to homepage.
+    $p2b = "data/home/default_bio.txt"; //p2b is "path to bio": default bio path first.
     $stmt->execute();
     $stmt->close();
     $student_id = $conn->insert_id; //gets the autoincremented id of the query, which is the student id of the new student being added.

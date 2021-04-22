@@ -14,15 +14,18 @@ include "./admin-mysql-connect.php";
 $status_messages = ""; //strings separated by <br>'s, each says what field has been updated after submission
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    //the project ID is in the url
+    //if an admin arrived on this page via GET request, then we just determine which project to edit.
+    //the project to edit is indicated by the project ID, which is in the url
 
     if (!isset($_GET["id"])) {
         echo "Invalid project ID.";
         die;
+
     } else {
-        //get the title of the project.
+
+        //get the title of the project and set that to be the $title variable, so that the admin can see the title of which project they are editing.
         $project_id = $_GET["id"];
-        $sql = 'SELECT project_id, title from projects where project_id=' . $project_id;
+        $sql = 'SELECT project_id, title from projects where project_id=' . $project_id; //SQL injection vulnerable
 
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -35,18 +38,25 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             die;
         }
     }
+
 }
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //On form submit, we gather values from $_POST variables and make database calls with the POST values.
+
     $project_id = $_POST["id"];
 
-    //edit project fields
-    $title = trim($_POST["title"]); //variable also gets displayed after "Edit Project:"...
+
+    //these 4 variables are the 4 aspects of a project to edit
+    $title = trim($_POST["title"]); //the $title variable also gets displayed after "Edit Project:"...
     $feat = isset($_POST["feat"]) ? 1 : 0; //1=featured, 0=not
     $priv = isset($_POST["priv"]) ? 1 : 0;
     $desc = trim($_POST["description"]);
 
+
     if (!empty($title)) {
-        //update title
+        //update title if title was specified
         $stmt = $conn->prepare("UPDATE projects set title=? where project_id=?");
         $stmt->bind_param("si", $title, $project_id);
         $stmt->execute();
@@ -54,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $status_messages .= "Title has been updated to {$title}.<br>";
     } else {
 
-        //Didn't specify a title, so we set the $title variable to the old title instead, so it still gets displayed after "Edit Project:"...
+        //Didn't specify a title, but we still set the $title variable to the original title instead, so it still gets displayed after "Edit Project:"...
         $sql = 'SELECT project_id, title from projects where project_id=' . $project_id;
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -63,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $title = $row['title'];
             }
         }
-    }
+    } //END update title
 
     //set if featured
     $stmt = $conn->prepare("UPDATE projects set featured=? where project_id=?");
@@ -74,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $status_messages .= "Project is now featured.<br>";
     } else {
         $status_messages .= "Project is now NOT featured.<br>";
-    }
+    } //END set if featured
 
     //set if private
     $stmt = $conn->prepare("UPDATE projects set private=? where project_id=?");
@@ -85,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $status_messages .= "Project is now private.<br>";
     } else {
         $status_messages .= "Project is now NOT private.<br>";
-    }
+    } //END set if private
 
 
     //If new description is not empty, then replace all the text in the old description.txt with the new desc.
@@ -96,15 +106,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mkdir($folder);
         }
 
-        file_put_contents($folder . "/description.txt", ""); //clear the old bio
-        file_put_contents($folder . "/description.txt", $desc); //put in new bio
+        file_put_contents($folder . "/description.txt", $desc); //put in new description (overwrites the old description)
         $status_messages .= "Description has been updated.<br>";
 
         //point to new description
         $sql = "UPDATE projects SET path_to_description=\"" . "data/pro/" . $project_id . "/description.txt" . "\" WHERE project_id=" . $project_id;
-
         $conn->query($sql);
-    }
+    } //END update description
 
 
     //if cover image was specified, then replace the old one
@@ -119,27 +127,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Only allow png files
-        if (
-            $imageFileType != "png"
-        ) {
+        if ($imageFileType != "png") {
             $status_messages .= "New cover image must be a PNG image file, so it was not uploaded. <br>";
+
         } else {
-            //delete old image at the assumed path
+            //If it's a png file:
+            //delete old image at the path data/pro/<id>/cover_image.png
             $target_file = "data/pro/{$project_id}/cover_image.png";
             if (file_exists($target_file)) {
                 unlink($target_file);
             }
-            //move the uploaded file into the server's filesystem
+
+            //move the new uploaded image into the server's filesystem
             if (move_uploaded_file($_FILES["uploaded_image"]["tmp_name"], $target_file)) {
                 $status_messages .= "The cover image " . htmlspecialchars(basename($_FILES["uploaded_image"]["name"])) . " has been updated.";
-                //point to the new file
+                //update the database entry to point to the new file
                 $sql = "UPDATE projects SET path_to_cover_image=\"" . "data/pro/" . $project_id . "/cover_image.png" . "\" WHERE project_id=" . $project_id;
                 $conn->query($sql);
+
             } else {
                 $status_messages .= "Sorry, there was an error uploading the cover image...";
             }
         }
-    }
+    } //END update cover image
 
 
     //if reset-files is checked, then reset the project's files and add in the new ones specified
@@ -163,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         //for each new file, up to 3, put the file into the folder 'data/pro/<id>/files/'
-        //for loop is identical to the file upload scheme in admin-upload-project except for the $status_messages line.
+        //(for loop is identical to the file upload scheme in admin-upload-project.php, except for the $status_messages line. Violation of DRY principle)
         for ($i = 1; $i <= 3; $i++) {
 
             if (is_uploaded_file($_FILES['uploaded_file_' . $i]['tmp_name'])) {
@@ -201,8 +211,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 }
             }
-        }
-    }
+        } //end for loop, for each file (1 to 3)
+
+
+
+    } //END reset project files
 }
 
 ?>

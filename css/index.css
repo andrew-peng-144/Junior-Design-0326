@@ -19,6 +19,9 @@ h1 {
 a {
     color: white;
 }
+
+
+
 #homepage-search-wrapper {
     display: block;
     margin-left: auto;
@@ -49,11 +52,11 @@ a {
 .filter-panel {
     display: none;
     background-color: lightgray;
-    width: 25%;
     margin-left: 60%;
     padding: 20px;
-    text-align: right;
+    text-align: left;
     border-radius: 10px;
+    font-size: 13px;
 }
 
 .custom-button {

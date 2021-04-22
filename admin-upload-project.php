@@ -36,9 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $project_id = $conn->insert_id; //gets the autoincremented id of the query, which is the project id of the new project being added.
 
     //now take the files (up to 3) and actually upload them by storing to filesystem. using $_FILES["foo"].
-    //the files to upload (attachments) will be located at new location, at /data/pro/<project_id>/files/file.pdf
-    //modify the table entries to point to those new locations
-    //for loop below is identical to the file upload scheme in admin-edit-project except the $upload_status line.
+    //to store at data/pro/<project_id>/files/file.pdf
+    //(for loop below is identical to the file upload scheme in admin-edit-project except the $upload_status line. Violation of DRY principle.)
     for ($i = 1; $i <= 3; $i++) {
 
         if (is_uploaded_file($_FILES['uploaded_file_' . $i]['tmp_name'])) {

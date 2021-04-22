@@ -2,63 +2,9 @@
 //This page lists out all projects in the database. It is in the same visual format as the Search results page (search.php)
 
 include 'mysql-connect.php';
+include 'listing-functions.php';
 
 
-/**
-*
-*Outputs all projects in the database as <div>'s in HTML.
-*
-* @param mysqli $conn the mysqli object.
-*/
-function list_all_projects($conn, $admin)
-{
-    if ($admin) {
-        //only admin can see private projects
-        $sql = "SELECT project_id, title, private, path_to_description, path_to_cover_image, students.first_name, students.last_name FROM projects "
-            . "INNER JOIN students ON projects.student_id=students.student_id";
-    } else {
-
-        //normal user is the exact same query, except can't see private projects.
-        $sql = "SELECT project_id, title, private, path_to_description, path_to_cover_image, students.first_name, students.last_name FROM projects "
-            . "INNER JOIN students ON projects.student_id=students.student_id AND private=0";
-    }
-
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-
-        while ($row = $result->fetch_assoc()) {
-            // Saving the description of the project into the $desc variable.
-            $desc = "";
-            if (isset($row['path_to_description'])) {
-                $fh = fopen(htmlspecialchars($row['path_to_description']), 'r');
-                while ($line = fgets($fh)) {
-                    $desc .= $line;
-                }
-                fclose($fh);
-            } else {
-                $desc = "Description unavailable.";
-            }
-
-            //The below HTML snippet is a single "card" search result. Since the snippet is inside a PHP while loop, multiple cards may be printed in total.
-        ?>
-            <div class="col">
-                <a style="" href="project.php?id=<?php echo htmlspecialchars($row['project_id']) ?>">
-                    <div class="card">
-                        <img style="" src="<?php echo $row['path_to_cover_image'] ?>" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($row['title']) ?></h5>
-                            <p class="card-text">by <?php echo htmlspecialchars($row['first_name']) . " " . htmlspecialchars($row['last_name']) ?></p>
-                            <p class="card-text truncated-description"><?php echo $desc ?></p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        <?php
-        }
-    }
-
-
-}//End function list_all_projects
 ?>
 
 <!doctype html>

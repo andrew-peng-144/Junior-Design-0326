@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 	session_start();
 }
 
-if (!empty($_GET['id'])) {
+if (is_numeric($_GET['id'])) {
 
 	//get full name, bio, path to portrait.. store those as global variables.
 	require 'mysql-connect.php';
@@ -28,7 +28,7 @@ if (!empty($_GET['id'])) {
 		}
 	}
 } else {
-	echo "Invalid";
+	echo "Invalid ID in URL";
 	die;
 }
 

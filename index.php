@@ -26,38 +26,55 @@ function display_slides(&$n_projects) {
         while ($row = $result->fetch_assoc()) {
 
             //Output the HTML for each slide.
-            ?>
-                <div class="mySlides fade">
-                    <div class="topleft-caption">
-                        <span class="caption-title">
-                            <?php echo $row['title'] ?>
-                        </span>
-                        <span class="caption-author">
-                            by <a href="student.php?id=<?php echo $row['student_id'] ?>"> <?php echo $row['first_name'] . " " . $row['last_name'] ?> </a>
-                        </span>
-                        <br>
-                        <div class="caption-description">
-                            <?php
-                            //read from description text file, and output the description right here.
-                            $myfile = fopen($row['path_to_description'], "r") or die("Unable to open file!");
-                            echo fread($myfile, filesize($row['path_to_description']));
-                            fclose($myfile);
-                            ?>
-                        </div>
+            slide_html($row['title'], $row['student_id'], $row['first_name'], $row['last_name'], $row['path_to_description'], $row['project_id'], $row['path_to_cover_image']);
 
-                    </div>
-                    <a href="project.php?id=<?php echo $row['project_id'] ?>">
-                        <img class="cover-image" src="<?php echo $row['path_to_cover_image']; ?>" style="width:100%">
-                    </a>
-                </div>
-
-            <?php
             $i++;
         }
     } else {
         echo "No featured projects, or there was an error.";
     }
 } //End display_slides function
+
+/**
+ * Simply output a <div> element that's a single slide of the featured project slideshow.
+ * Only called by display_slides()
+ */
+function slide_html($title, $student_id, $first_name, $last_name, $path_to_description, $project_id, $path_to_cover_image) {
+
+    // read the description into a single string variable $desc
+    $desc = "";
+    if (isset($path_to_description)) {
+        $fh = fopen(htmlspecialchars($path_to_description), 'r');
+        while ($line = fgets($fh)) {
+            $desc .= $line;
+        }
+        fclose($fh);
+    } else {
+        $desc = "Description unavailable.";
+    }
+
+    ?>
+        <div class="mySlides fade">
+            <div class="topleft-caption">
+                <span class="caption-title">
+                    <?php echo $title ?>
+                </span>
+                <span class="caption-author">
+                    by <a href="student.php?id=<?php echo $student_id ?>"> <?php echo $first_name . " " . $last_name ?> </a>
+                </span>
+                <br>
+                <div class="caption-description">
+                    <?php echo $desc; ?>
+                </div>
+
+            </div>
+            <a href="project.php?id=<?php echo $project_id ?>">
+                <img class="cover-image" src="<?php echo $path_to_cover_image; ?>" style="width:100%">
+            </a>
+        </div>
+        
+    <?php
+}
 
 ?>
 
@@ -68,8 +85,8 @@ function display_slides(&$n_projects) {
 <head>
     <meta charset="utf-8">
 
-    <title>CGA Student Project Showcase</title>
-    <meta name="description" content="A showcase of student projects from the free Shakespeare course provided by Common Good Atlanta.">
+    <title>CGA Project Showcase</title>
+    <meta name="description" content="Student-led pedagogical materials for higher education in prison and re-entry programs">
     <meta name="author" content="Gatech Junior Design Team JID-0326">
     <link rel="stylesheet" href="css/index.css">
 
@@ -163,21 +180,37 @@ function display_slides(&$n_projects) {
                     <input class='search-bar' type="text" placeholder="Search..." name="query" required>
                     <span class='custom-button' onclick="document.getElementById('search-submit').click();"> <img src="data/home/search.png" style="width:20px"> </span>
 
-                    <span class='custom-button' onclick=filters_dropdown_onclick()>Filters (todo)</span>
+                    <span class='custom-button' onclick=onclick_filters_dropdown()>Filters</span>
 
 
                     <div class='filter-panel' style="display:none;">
-                        Sort by:
-                        <input type="radio" id="Alphabetical" name='sort-alpha' checked>
-                        <label for="Alphabetical">Alphabetical</label>
-                        <input type="radio" id="Date" name='sort-date'>
-                        <label for="Date">Date</label>
+                        Result Type: <br>
+
+                        <input type="radio" id="radio-project" name='result-type' value='only-projects'>
+                        <label for="radio-project">Only Projects</label>
                         <br>
-                        Has Project Media Type:
-                        <input type="checkbox" id="Videos" name="has-video">
-                        <label for="Videos">Videos</label>
-                        <input type="checkbox" id="Images" name="has-image">
-                        <label for="Images">Images</label>
+
+                        <input type="radio" id="radio-student" name='result-type' value='only-students'>
+                        <label for="radio-student">Only Student Profiles</label>
+                        <br>
+
+                        <input type="radio" id="radio-both" name='result-type' value='both' checked>
+                        <label for="radio-both">Both</label>
+                        <br><br>
+
+                        Project File Media Type: <br>
+                        <input type="checkbox" id="checkbox-any" name="has-any" onclick=onclick_media_type_any() checked>
+                        <label for="checkbox-any">Any</label>
+
+                        <input type="checkbox" id="checkbox-Text" name="has-text" checked disabled>
+                        <label for="checkbox-Text">Text Documents</label>
+
+                        <input type="checkbox" id="checkbox-Videos" name="has-video" checked disabled>
+                        <label for="checkbox-Videos">Videos</label>
+
+                        <input type="checkbox" id="checkbox-Images" name="has-image" checked disabled>
+                        <label for="checkbox-Images">Images</label>
+                        
                     </div>
 
                     <input type='submit' id="search-submit" hidden>
@@ -186,12 +219,17 @@ function display_slides(&$n_projects) {
             </div>
 
             <script>
-                //script for show/hide the filter panel.
+                //script for show/hide the advanced search filter panel.
                 var search_wrapper = document.getElementById("homepage-search-wrapper");
                 var panel = document.querySelector(".filter-panel")
 
-                function filters_dropdown_onclick() {
-                    //toggle between showing and hiding the filter panel.
+                /**
+                 * Onclick handler for clicking the "Filters" button
+                 * 
+                 * Toggles between showing and hiding the filter panel.
+                 */
+                function onclick_filters_dropdown() {
+
                     if (panel.style.display === "none") {
                         panel.style.display = "block";
                     } else {
@@ -200,8 +238,36 @@ function display_slides(&$n_projects) {
                 }
             </script>
 
+            <script>
+                //script for enable/disable the media types in the advanced search panel
+                var any_checkbox = document.getElementById("checkbox-any");
+
+                var text_checkbox = document.getElementById("checkbox-Text");
+                var video_checkbox = document.getElementById("checkbox-Videos");
+                var image_checkbox = document.getElementById("checkbox-Images");
+
+                /**
+                 * Onclick handler for clicking on the "any" checkbox in the filter panel.
+                 * 
+                 * Toggles between enabling and disabling the filetype checkboxes.
+                 */
+                function onclick_media_type_any() {
+                    if (any_checkbox.checked) {
+                        video_checkbox.disabled = true;
+                        image_checkbox.disabled = true;
+                        text_checkbox.disabled = true;
+
+                    } else {
+                        video_checkbox.disabled = false;
+                        image_checkbox.disabled = false;
+                        text_checkbox.disabled = false;
+                    }
+                }
+            
+            </script>
+
             <p style="text-align:center;">
-                We are presenting student projects from our Shakespeare literary course. Learn more <a href="aboutus.php" style="color:#353940;">here.</a>
+                We are currently exhibiting student projects from the course "Shakespeare and the Common Good in Atlanta". Learn more <a href="aboutus.php" style="color:#353940;">here.</a>
 
             </p>
             <table style="padding: 10px;width: 50%;margin: auto;">

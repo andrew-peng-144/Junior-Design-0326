@@ -54,14 +54,19 @@ body {
     font-size: 16px;
 }
 
-.cgaprojects {
+.title {
     color: #FF5335;
     font-size: 30px;
     font-weight: 900;
     margin-top: 4px;
     margin-bottom: 4px;
-    float: left;
+    /* float: left; */
     vertical-align: middle;
+}
+.sub-header {
+    color: rgb(150,150,150);
+    font-style: italic;
+    font-size: 15px;
 }
 
 .abouthomepage {

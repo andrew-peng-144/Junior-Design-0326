@@ -10,7 +10,9 @@ if (isset($_SESSION["administrator"]) && $_SESSION["administrator"] === true) {
   $admin = true;
 }
 
-if (isset($_GET['id'])) {
+include 'listing-functions.php';
+
+if (is_numeric($_GET['id'])) {
 
     //get all info about this project, given its ID was sent to this page
     //And store the info as global variables: $id, $student_name, $student_id, $title, $desc, $path_to_cover_image, $feat, $priv
@@ -25,7 +27,8 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
 
-            if ($row['private'] && !$admin) { //hide private projects unless viewer is an admin.
+            if ($row['private'] && !$admin) {
+                //hide private projects unless viewer is an admin.
                 echo 'Private project';
                 die;
             }
@@ -51,7 +54,7 @@ if (isset($_GET['id'])) {
     }
 } else {
     //No ID? no project to display!
-    echo "Invalid";
+    echo "Invalid ID in URL";
     die;
 }
 
@@ -87,64 +90,6 @@ function display_edit_button($admin) {
         <?php
     }
 }
-
-
-/**
-* (IDENTICAL to function in list-projects.php)
-* Outputs all projects in the database as <div>'s in HTML.
-* @param mysqli $conn the mysqli object.
-*/
-function list_all_projects($conn, $admin)
-{
-    if ($admin) {
-        //only admin can see private projects
-        $sql = "SELECT project_id, title, private, path_to_description, path_to_cover_image, students.first_name, students.last_name FROM projects "
-            . "INNER JOIN students ON projects.student_id=students.student_id";
-    } else {
-
-        //normal user is the exact same query, except can't see private projects.
-        $sql = "SELECT project_id, title, private, path_to_description, path_to_cover_image, students.first_name, students.last_name FROM projects "
-            . "INNER JOIN students ON projects.student_id=students.student_id AND private=0";
-    }
-
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-
-        while ($row = $result->fetch_assoc()) {
-            // Saving the description of the project into the $desc variable.
-            $desc = "";
-            if (isset($row['path_to_description'])) {
-                $fh = fopen(htmlspecialchars($row['path_to_description']), 'r');
-                while ($line = fgets($fh)) {
-                    $desc .= $line;
-                }
-                fclose($fh);
-            } else {
-                $desc = "Description unavailable.";
-            }
-
-            //The below HTML snippet is a single "card" search result. Since the snippet is inside a PHP while loop, multiple cards may be printed in total.
-        ?>
-            <div class="col">
-                <a style="" href="project.php?id=<?php echo htmlspecialchars($row['project_id']) ?>">
-                    <div class="card">
-                        <img style="" src="<?php echo $row['path_to_cover_image'] ?>" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($row['title']) ?></h5>
-                            <p class="card-text">by <?php echo htmlspecialchars($row['first_name']) . " " . htmlspecialchars($row['last_name']) ?></p>
-                            <p class="card-text truncated-description"><?php echo $desc ?></p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        <?php
-        }
-    }
-
-
-}//End function list_all_projects
-
-
 
 
 ?>
@@ -183,6 +128,7 @@ function list_all_projects($conn, $admin)
 
             <div style="padding:2em" id="project-description">
                 <?php
+                //In addition to the description, also say whether a project is featured and/or private here.
                 if ($admin && $priv) {
                     $priv_style = " color: rgb(150,150,150);";
                     echo "<div style={$priv_style}>(Private Project)</div>";

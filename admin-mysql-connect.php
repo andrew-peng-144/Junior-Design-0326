@@ -12,11 +12,14 @@ if (!isset($_SESSION["administrator"]) || $_SESSION["administrator"] !== true) {
     exit;
 }
 
-//mysql admin-level access
+//**********NOTE: Environment variables below are hardcoded **********//
 $servername = "localhost";
 $username = "cga-admin";
 $password = "cgatestpassword678";
 $dbname = "cga_showcase";
+//************************************ */
+
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
