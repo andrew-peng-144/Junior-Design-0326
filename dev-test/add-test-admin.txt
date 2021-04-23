@@ -1,0 +1,9 @@
+SQL command for adding a test admin user to the 'admins' table.
+
+The test credentials are currently
+U: admintest
+P: passwordtesting123 (hashed to $2y$10$39YNjfOE.GG5rSuuE4aVJ.lVpg/tUZESbTlwIqbZUX4KxESKrRM.C)
+
+------------------------------------------
+
+INSERT INTO admins (username, password) VALUES ("admintest", "$2y$10$39YNjfOE.GG5rSuuE4aVJ.lVpg/tUZESbTlwIqbZUX4KxESKrRM.C")

@@ -198,7 +198,7 @@ function slide_html($title, $student_id, $first_name, $last_name, $path_to_descr
                         <label for="radio-both">Both</label>
                         <br><br>
 
-                        Project File Media Type: <br>
+                        Project File contains Media Type: <br>
                         <input type="checkbox" id="checkbox-any" name="has-any" onclick=onclick_media_type_any() checked>
                         <label for="checkbox-any">Any</label>
 

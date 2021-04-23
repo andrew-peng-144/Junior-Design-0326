@@ -123,7 +123,7 @@ function project_search($query_tokens, $conn, $admin, &$n_results)
                 $filetypes .= ")";
 
                 $sql2 = "SELECT file_id from project_files where project_id=" . $row['project_id'] . " AND project_files.file_type IN " . $filetypes;
-                echo $sql2;
+                
                 $result2 = $conn->query($sql2);
 
                 if ($result2->num_rows > 0) {

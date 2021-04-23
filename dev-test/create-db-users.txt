@@ -1,0 +1,5 @@
+create the administrator and the visitor users.
+-------------------------------------------------
+CREATE USER 'cga-admin'@'localhost' IDENTIFIED BY 'cgatestpassword678';
+
+CREATE USER 'visitor'@'localhost' IDENTIFIED BY 'password123';
