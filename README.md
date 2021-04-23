@@ -4,7 +4,7 @@ The following Customer Delivery Document provided by Junior design team JID 0326
 The recommended skillset for the next team would be knowledge of PHP, familiarity with Linux, and knowledge of development on the LAMP stack (Linux, Apache, MariaDB/MySQL, PHP).
 
 # Release Notes
-### Features
+## Features
 
 The current website at [cgaprojectshowcase.com](https://www.cgaprojectshowcase.com) was created from scratch. This website hosts projects made by students of Common Good Atlanta (CGA), as well as containing portfolio-like profiles for these students. Any visitor to the site is able to browse these projects and student profiles. More details can be found in the Detailed Design Document. These are the main features we have implemented so far.
 
@@ -40,7 +40,7 @@ Homepage has a section that displays featured projects.
 - Data for a project and student is stored in a MariaDB (MySQL) database.
 - Larger data such as images and long descriptions are stored in the filesystem, under the directory `data/`.
 
-### Known Issues
+## Known Issues
 
 **Important: Admin Privilages**
 
@@ -49,6 +49,7 @@ Administrators have the ability to delete projects from the system and only a co
 - Possible fix: 
 
 **PNG only**
+
 Currently, only PNG images may be uploaded for a project’s cover image or a student’s profile picture.
 - This is because the server always looks to display the image named portrait.png or cover_image.png, and it doesn’t account for other image file types like portrait.jpg.
 - Possible fix: Let’s say the instructor uploads an image “apple.jpg” as a project’s cover image. Instead of storing it in the filesystem as just a generic “cover_image.png”, we store it as “apple.jpg” keeping the same name. And make sure to have the database entry path_to_cover_image pointing to that filename. So then the client can just draw apple.jpg instead of always looking for a file named cover_image.png.
