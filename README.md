@@ -225,16 +225,17 @@ We followed this for SSL installation: [SSL on amazon linux 2](https://docs.aws.
 
 We completed “Step 1” and the “Certificate automation: Let's Encrypt with Certbot on Amazon Linux 2” sections.
 This means
--We enabled TLS on the server, and used a self-signed certificate temporarily (followed “step 1”)
--We used Certbot as a Certificate Authority (CA) to generate a CA-signed certificate.
--Since the certificate expires after 90 days, we automated the certificate renewal using a cron job. (Followed the instructions in the “Configure automated certificate renewal” section).
+- We enabled TLS on the server, and used a self-signed certificate temporarily (followed “step 1”)
+- We used Certbot as a Certificate Authority (CA) to generate a CA-signed certificate.
+- Since the certificate expires after 90 days, we automated the certificate renewal using a cron job. (Followed the instructions in the “Configure automated certificate renewal” section).
 
 After Certbot generated a certificate for us, it left us with the following info for reference.
+```
 IMPORTANT NOTES:
     Congratulations! Your certificate and chain have been saved at:
     /etc/letsencrypt/live/cgaprojectshowcase.com/fullchain.pem
     Your key file has been saved at:
     /etc/letsencrypt/live/cgaprojectshowcase.com/privkey.pem
-
+```
 # Questions?
 Contact the previous junior design team member Andrew Peng: apeng34@gatech.edu 
