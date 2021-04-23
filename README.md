@@ -8,23 +8,23 @@ The recommended skillset for the next team would be knowledge of PHP, familiarit
 
 The current website at [cgaprojectshowcase.com](https://www.cgaprojectshowcase.com) was created from scratch. This website hosts projects made by students of Common Good Atlanta (CGA), as well as containing portfolio-like profiles for these students. Any visitor to the site is able to browse these projects and student profiles. More details can be found in the Detailed Design Document. These are the main features we have implemented so far.
 
-** Search Bar: **
+**Search Bar:**
 - Homepage has a search bar. Users can search for any student profile or project in the database.
 - Users can click on a search result to be brought to a page that explains the project or student profile in more detail.
 
-** Featured Projects: **
+**Featured Projects:**
 Homepage has a section that displays featured projects.
 - Projects can get tagged as “featured” by instructors, so that they show up in the homepage
 
-** Project and Profile Details: **
+**Project and Profile Details:**
 - The page that explains the project in more detail is `project.php`
 - For student profiles: `student.php`
 
-** Advanced Search: **
+**Advanced Search:**
 - Users can perform advanced search filters
   - Filter by project file extension (`.pdf`, `.png`, etc) or only select project or student search results
 
-** Administrator Actions **
+**Administrator Actions**
 
 - Administrators can upload projects to the site
   - Respective page demonstrating this feature: `admin-upload.project.php`
@@ -36,7 +36,7 @@ Homepage has a section that displays featured projects.
   - Pages: `admin-remove-projects.php` and `admin-remove-students.php`
 - Administrators must log-in before being able to do any of the above actions.
 
-** Storage **
+**Storage**
 - Data for a project and student is stored in a MariaDB (MySQL) database.
 - Larger data such as images and long descriptions are stored in the filesystem, under the directory `data/`.
 
@@ -48,21 +48,21 @@ Administrators have the ability to delete projects from the system and only a co
 - Possible fix: We could use the Apache configuration files to limit the administrator-only pages (any php file with `admin-` in the name) to only the specific IP addresses of the CGA administrators.
 - Possible fix: 
 
-** PNG only **
+**PNG only**
 Currently, only PNG images may be uploaded for a project’s cover image or a student’s profile picture.
 - This is because the server always looks to display the image named portrait.png or cover_image.png, and it doesn’t account for other image file types like portrait.jpg.
 - Possible fix: Let’s say the instructor uploads an image “apple.jpg” as a project’s cover image. Instead of storing it in the filesystem as just a generic “cover_image.png”, we store it as “apple.jpg” keeping the same name. And make sure to have the database entry path_to_cover_image pointing to that filename. So then the client can just draw apple.jpg instead of always looking for a file named cover_image.png.
 
-** Hardcoded MySQL/MariaDB User crendentials **
+**Hardcoded MySQL/MariaDB User crendentials**
 - See the files mysql-connect.php and admin-mysql-connect.php
 - This means that any change to the mysql username/passwords would need to be reflected. A more long-term solution would be to use environment variables.
 
-** Admin forms SQL injection **
+**Admin forms SQL injection**
 - The forms that administrators use to upload projects and create student profiles are vulnerable to SQL injection.
 - However, the admin is meant to be a user with many permissions anyway, such as editing profiles and even deleting projects.
 Since the admin has permission to remove projects anyway, it is not a priority to prevent SQL injection   from the admin’s point of view, because the admin is meant to have these kinds of permissions. From a “good code” standpoint however, this may be slightly undesirable.
 
-** Directory Visibility **
+**Directory Visibility**
 Website directories’ layouts are visible to any user. Test it by typing cgaprojectshowcase.com/data.
 - Possible fix: Use Apache configuration files to limit access.
 
@@ -105,7 +105,7 @@ The WAMPserver now hosts the code for the website. However, the MariaDB database
 It should take you to the homepage. But it will throw some errors because there are no tables in the database yet.
 
 
-** MariaDB Database Tables setup **
+**MariaDB Database Tables setup**
 
 - Access the MariaDB console: Left-click -> MariaDB -> MariaDB Console
 - Just enter `root` as username, and enter nothing for password.
@@ -113,7 +113,7 @@ It should take you to the homepage. But it will throw some errors because there 
 - Under the `dev-test` folder, open `create-tables.txt`. It contains four SQL commands to create the four tables for the database. Run all four commands.
 - Under the `dev-test` folder, open `add-test-admin.txt`. Under the dashed line, there is the SQL command to add an admin to the `admins` table. It uses placeholder credentials for testing purposes. Run the command.
 
-** MariaDB User setup **
+**MariaDB User setup**
 
 - Note that having these users is mainly for organizational purposes. They are not strictly necessary for security because only the server-side itself is directly connecting to the database. Site visitors don’t directly access the database; rather, the PHP code (that runs for each site visitor) is executed by the server and connects to the database itself.
 
@@ -124,7 +124,7 @@ For consistency with the live server on EC2, we should set the users and their c
 
 Now the database should be fully set-up and have identical settings to the database on the live server.
 
-** PHP version config **
+**PHP version config**
 
 Last quick thing, let’s configure the PHP version of the WAMPserver to keep the environment consistent with the one on the live server (which runs PHP 7.2).
 - On the bottom-right of your screen (far-right of the taskbar), locate the icon for the WAMPserver (should look like a 'w' with a rounded square around it.)
@@ -133,7 +133,7 @@ Last quick thing, let’s configure the PHP version of the WAMPserver to keep th
 
 - You may also click this icon to start/stop the WAMPserver and edit configuration files for Apache, MariaDB/MySQL, and PHP.
 
-** Fully testing the website locally **
+**Fully testing the website locally**
 - Navigate to `localhost/cgaprojectshowcase`. Try logging-in, with username `admintest` and `passwordtesting123` respectively. Note that these credentials are stored in the `admins` table in MariaDB, and were added from the command in `add-test-admin.txt`.
 - You can now click `Upload Projects` or `Add Student` at the top and follow the instructions accordingly.
 - For a student or project that you added, you should be able to search for from the homepage search bar. Test if that functionality works properly.
