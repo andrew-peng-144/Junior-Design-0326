@@ -41,7 +41,7 @@
       </div>
       <div class="col-sm-8">
         <h2>About the Shakespeare and the Common Good in Atlanta Course </h2><br>
-        <h4>Taught in Fall 2020 and Spring 2021, the Shakespeare and the Common Good in Atlanta
+        <h4>Taught in Fall 2020 and Spring 2021, the Shakespeare and the Common Good in Atlanta Course
         offered students an interdisciplinary survey of Shakespeare and his works.</h4><br>
         <p>Hosted by Common Good Atlanta and taught in collaboration with actors from the
         <a href="https://www.shakespearetavern.com">Shakespeare Tavern Playhouse</a>,
@@ -53,7 +53,7 @@
         pedagogical materials that result from its future class offerings.</p>
 
         <p>Both the Shakespeare and the Common Good in Atlanta class and the Common Good Atlanta Showcase site were made
-          possible thanks to a grant from the <a href="https://www.whiting.org">Whiting Foundation</a>.</p>
+          possible by a grant from the <a href="https://www.whiting.org">Whiting Foundation</a>.</p>
       </div>
     </div>
   </div>

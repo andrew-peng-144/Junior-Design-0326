@@ -123,7 +123,7 @@ For consistency with the live server on EC2, we should set the users and their c
 - Under the `dev-test` folder, open `create-db-users.txt`. Run the two commands to create the `cga-admin` and the `visitor` users.
 - Open `db-user-perms.txt` and run those commands to set the user permissions
 
-Now the database should be fully set-up and have identical settings to the database on the live server.
+Now the database should be fully set-up and have the same settings to the database on the live server, except for the admin login, as the live server's admin login is not `admintest` and `passwordtesting123.`. Also the mysql root password on the live server is not blank.
 
 **PHP version config**
 
@@ -135,18 +135,18 @@ Last quick thing, let’s configure the PHP version of the WAMPserver to keep th
 - You may also click this icon to start/stop the WAMPserver and edit configuration files for Apache, MariaDB/MySQL, and PHP.
 
 **Fully testing the website locally**
-- Navigate to `localhost/cgaprojectshowcase`. Try logging-in, with username `admintest` and `passwordtesting123` respectively. Note that these credentials are stored in the `admins` table in MariaDB, and were added from the command in `add-test-admin.txt`.
+- Navigate to `localhost/cgaprojectshowcase`. Try logging-in, with username `admintest` and `passwordtesting123` respectively. (Note that these credentials are stored in the `admins` table in MariaDB, and were added from the command in `add-test-admin.txt`).
 - You can now click `Upload Projects` or `Add Student` at the top and follow the instructions accordingly.
 - For a student or project that you added, you should be able to search for from the homepage search bar. Test if that functionality works properly.
 
 
-
-
-### To change a password:
+### To generate a hash for an admin password:
+This section briefly mentions how to generate a hashed password for the admin account used to login on the CGA login screen (on `admin-login.php`)
 1. Start the WAMPserver.
 2. Generate the hash for the new password that you want to change it to. Under the `dev-test` folder, edit the `hash-gen.php` file. Change the `$password` variable to the new password.
-3. In a web browser, navigate to `localhost/cgaprojectshowcase/dev-test/hash-gen.php`. The page should just have the hash of the password.
-4. Use a mySQL command to edit the password of a user in the `admins` table. The new password value should be the hash.
+3. In a web browser, navigate to `localhost/cgaprojectshowcase/dev-test/hash-gen.php`. The page should should display the hash of the password.
+
+In the `admins` table for both the WAMPserver and the live AWS server, the `password` column stores a hashed password for the admin user. So, you can `UPDATE` the `admins` table on either server if you want to change the password or username.
 
 **Please feel free to change any placeholder credentials. This also includes the passwords for MariaDB users that were created from the commands in `create-db-users.txt`**
 
@@ -175,7 +175,7 @@ Note: It is extremely important that only a select few IP addresses are allowed 
 11. Save the rule.
 
 
-We still need to download software to connect to the server through port 22. We also need a “key file” which is basically the password to use when connecting to the server through port 22. Please contact Dr. Jonathan Shelley for the `.ppk` key file. Handle the key with extreme caution however, as anyone with the key file can edit files on the server as a root user and basically do anything on the server.
+We still need to download software to connect to the server through port 22. We also need a “key file” which is basically the password to use when connecting to the server through port 22. Please contact Dr. Jonathan Shelley for the `.ppk` key file.
 
 ### Install and run PuTTY
 
@@ -188,6 +188,14 @@ PuTTY will be used for running commands on the live server:
 6. On the Category panel, click “Session”, enter a name for the session in Saved Sessions, and then click “Save”.
 7. Click “Open” to connect to the server.
 8. If successful, you should now be able to run Linux commands on the server.
+
+#### Using PuTTY to run SQL commands on the live server
+You can use PuTTY to run commands on the live MariaDB database.
+- In PuTTY, once you have logged in, enter the command `mysql -u root -p` to login to the database as a root user.
+- It will prompt you for a password, which is `passwordtest321`. Now you are in MariaDB.
+- Enter the command `use cga_showcase;` then `show tables;` and it should list the four tables in the database.
+- You can then run `SELECT` commands on those tables to view the database.
+In the future, consider setting up phpMyAdmin for more convenient database viewing and manipulation.
 
 ### Install and run WinSCP
 
@@ -209,7 +217,9 @@ The typical workflow is to work on some code, then save it, then manually drag t
 
 From the Github repo, you can transfer any code to the server EXCEPT the folder `dev-test`! It contains the commands to setup database records and add passwords. (used in Post-Configuration section in Install Guide above). Accidental deployment would expose the database setup to any site visitor. `dev-test` is supposed to only be used in development, on a test server using WAMPserver for example, which was used in the “Installation” section of this document.
 
-**Important**: The password for admin is extremely important and if it gets leaked then all the content on the site risks getting deleted or vandalized since admins can remove and edit projects. So… in the case that the admin password gets leaked… a developer who setup the WAMPserver should generate a new password with `hash-gen.php` and come up with a new username, then edit the mysql table on the live server to have those new credentials. Then they need to restart everyone’s sessions… do this by deleting every file on the live server in /var/lib/php/session.
+**Important: Password Leaks**
+
+The password for admin is extremely important and if it gets leaked then all the content on the site risks getting deleted or vandalized since admins can remove and edit projects. So… in the case that the admin password gets leaked… a developer who setup the WAMPserver should generate a new password with `hash-gen.php` and come up with a new username, then edit the mysql table on the live server to have those new credentials. Then they need to restart everyone’s sessions… do this by deleting every file on the live server in /var/lib/php/session.
 
 # Amazon Web Services (AWS) Set-up Information
 
