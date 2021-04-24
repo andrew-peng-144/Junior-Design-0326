@@ -13,7 +13,7 @@ The current website at [cgaprojectshowcase.com](https://www.cgaprojectshowcase.c
 - Users can click on a search result to be brought to a page that explains the project or student profile in more detail.
 
 **Featured Projects:**
-Homepage has a section that displays featured projects.
+- Homepage has a section that displays featured projects.
 - Projects can get tagged as “featured” by instructors, so that they show up in the homepage
 
 **Project and Profile Details:**
@@ -44,13 +44,12 @@ Homepage has a section that displays featured projects.
 
 **Important: Admin Privilages**
 
-Administrators have the ability to delete projects from the system and only a couple people should know the credentials. However, if anyone else got ahold of the credentials, then they would be able to add/delete/edit any project or student profile on the website. This is extremely dangerous and all the site material can be compromised if a single password was leaked.
+- Administrators have the ability to delete projects from the system and only a couple people should know the credentials. However, if anyone else got ahold of the credentials, then they would be able to add/delete/edit any project or student profile on the website. This is extremely dangerous and all the site material can be compromised if a single password was leaked.
 - Possible fix: We could use the Apache configuration files to limit the administrator-only pages (any php file with `admin-` in the name) to only the specific IP addresses of the CGA administrators.
-- Possible fix: 
 
 **PNG only**
 
-Currently, only PNG images may be uploaded for a project’s cover image or a student’s profile picture.
+- Currently, only PNG images may be uploaded for a project’s cover image or a student’s profile picture.
 - This is because the server always looks to display the image named portrait.png or cover_image.png, and it doesn’t account for other image file types like portrait.jpg.
 - Possible fix: Let’s say the instructor uploads an image “apple.jpg” as a project’s cover image. Instead of storing it in the filesystem as just a generic “cover_image.png”, we store it as “apple.jpg” keeping the same name. And make sure to have the database entry path_to_cover_image pointing to that filename. So then the client can just draw apple.jpg instead of always looking for a file named cover_image.png.
 
@@ -64,9 +63,8 @@ Currently, only PNG images may be uploaded for a project’s cover image or a st
 Since the admin has permission to remove projects anyway, it is not a priority to prevent SQL injection   from the admin’s point of view, because the admin is meant to have these kinds of permissions. From a “good code” standpoint however, this may be slightly undesirable.
 
 **Directory Visibility**
-Website directories’ layouts are visible to any user. Test it by typing cgaprojectshowcase.com/data.
-- Possible fix: Use Apache configuration files to limit access.
-
+- Website directories’ layouts are visible to any user. Test it by visiting the site `cgaprojectshowcase.com/data`.
+- Possible fix: Use Apache configuration files to limit access to these directories.
 
 # Install Guide
 
@@ -83,7 +81,7 @@ Windows 7 or up, 64-bit
 - Follow the installation process. Make note of where the `wamp64` directory is installed. It may be directly under the C: drive root.
 
 ### Download:
-The code repository is currently hosted by __________________________
+The code repository should be in the same location as this readme file
 
 ### Build:
 Clone the repository to your local machine. You can clone it to anywhere you like.
@@ -127,11 +125,9 @@ Now the database should be fully set-up and have the same settings to the databa
 
 **PHP version config**
 
-Last quick thing, let’s configure the PHP version of the WAMPserver to keep the environment consistent with the one on the live server (which runs PHP 7.2).
+Let’s configure the PHP version of the WAMPserver to keep the environment consistent with the one on the live server (which runs PHP 7.2).
 - On the bottom-right of your screen (far-right of the taskbar), locate the icon for the WAMPserver (should look like a 'w' with a rounded square around it.)
- 
 - Set PHP version: Left-click -> PHP -> Version -> 7.2.4
-
 - You may also click this icon to start/stop the WAMPserver and edit configuration files for Apache, MariaDB/MySQL, and PHP.
 
 **Fully testing the website locally**
@@ -148,7 +144,7 @@ This section briefly mentions how to generate a hashed password for the admin ac
 
 In the `admins` table for both the WAMPserver and the live AWS server, the `password` column stores a hashed password for the admin user. So, you can `UPDATE` the `admins` table on either server if you want to change the password or username.
 
-**Please feel free to change any placeholder credentials. This also includes the passwords for MariaDB users that were created from the commands in `create-db-users.txt`**
+**Please feel free to change any placeholder credentials mentioned in this document. This also includes the passwords for MariaDB users that were created from the commands in `create-db-users.txt`**
 
 # Deployment Guide
 
