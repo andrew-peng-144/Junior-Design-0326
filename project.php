@@ -130,11 +130,11 @@ function display_edit_button($admin) {
                 <?php
                 //In addition to the description, also say whether a project is featured and/or private here.
                 if ($admin && $priv) {
-                    $priv_style = " color: rgb(150,150,150);";
+                    $priv_style = "'color: rgb(150,150,150);'";
                     echo "<div style={$priv_style}>(Private Project)</div>";
                 }
                 if ($feat) {
-                    $feat_style = "font-style: italic; color: rgb(150,150,150);";
+                    $feat_style = "'font-style: italic; color: rgb(150,150,150);'";
                     echo "<div style={$feat_style}>This project is featured on the homepage!</div>";
                 }
                 echo $desc;

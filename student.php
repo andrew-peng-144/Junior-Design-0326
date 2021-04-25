@@ -6,6 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 	session_start();
 }
 
+include 'card.php';
+
 if (is_numeric($_GET['id'])) {
 
 	//get full name, bio, path to portrait.. store those as global variables.
@@ -15,6 +17,7 @@ if (is_numeric($_GET['id'])) {
 	$result = $conn->query($sql);
 	if ($result->num_rows > 0) {
 		while ($row = $result->fetch_assoc()) {
+			// Only 1 loop iteration
 			$full_name = $row['first_name'] . " " . $row['last_name'];
 			$bio = "";
 			if (file_exists(htmlspecialchars($row['path_to_bio']))) {
@@ -48,13 +51,14 @@ function display_edit_button($admin)
 
 /**
 * Searches for all projects made by this student in the database, then outputs the HTML for all the projects that this student made.
+* @param string $full_name The student's full name
 */
-function display_my_projects($conn) {
+function display_my_projects($conn, $full_name) {
 
 	//keep data for each project as global variables too
 	$project_ids = array();
 	$titles = array();
-	$descs = array();
+	$paths_to_descs = array();
 	$paths_to_ci = array();
 
 	//select all projects made by this student
@@ -65,42 +69,16 @@ function display_my_projects($conn) {
 	if ($result->num_rows > 0) {
 		while ($row = $result->fetch_assoc()) {
 
-			$desc = "";
-			$path_to_desc = htmlspecialchars($row['path_to_description']);
-			if (isset($row['path_to_description']) && file_exists($path_to_desc)) {
-				$fh = fopen($path_to_desc, 'r');
-				while ($line = fgets($fh)) {
-					$desc .= $line;
-				}
-				fclose($fh);
-			} else {
-				$desc = "Decription unavailable.";
-			}
-
 			array_push($project_ids, htmlspecialchars($row['project_id']));
 			array_push($titles, htmlspecialchars($row['title']));
-			array_push($descs, $desc);
+			array_push($paths_to_descs, htmlspecialchars($row['path_to_description']));
 			array_push($paths_to_ci, htmlspecialchars($row['path_to_cover_image']));
 		}
 	}
 
-	//For each project, output a <div>
 	for ($i = 0; $i < count($project_ids); $i++) {
-		?>
-			<div class="col">
-				<a href="project.php?id=<?php echo $project_ids[$i] ?>">
-					<div class="card">
-						<img src="<?php echo $paths_to_ci[$i] ?>" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title"><?php echo $titles[$i] ?></h5>
-							<p class="card-text">
-								<div> <?php echo $descs[$i] ?></div>
-							</p>
-						</div>
-					</div>
-				</a>
-			</div>
-		<?php
+		//For each project, display it as card
+		card_display_project($project_ids[$i], $paths_to_ci[$i], $titles[$i], $full_name, "", $paths_to_descs[$i]);
 	}
 }
 
@@ -149,7 +127,7 @@ function display_my_projects($conn) {
 		<div class="row row-cols-1 row-cols-3 g-4">
 
 			<?php
-				display_my_projects($conn);
+				display_my_projects($conn, $full_name);
 			?>
 		</div>
 

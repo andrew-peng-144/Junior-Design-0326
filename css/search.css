@@ -3,9 +3,10 @@ This CSS file is used by: search.php, list-projects.php, list-students.php
 */
 
 .truncated-description {
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    /* white-space: nowrap;
+    text-overflow: ellipsis; */
     overflow: hidden;
+    max-height: 35px;
     font-size: 12px;
 }
 a {

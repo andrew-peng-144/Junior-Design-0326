@@ -56,13 +56,12 @@ function slide_html($title, $student_id, $first_name, $last_name, $path_to_descr
     ?>
         <div class="mySlides fade">
             <div class="topleft-caption">
-                <span class="caption-title">
+                <div class="caption-title">
                     <?php echo $title ?>
-                </span>
-                <span class="caption-author">
+                </div>
+                <div class="caption-author">
                     by <a href="student.php?id=<?php echo $student_id ?>"> <?php echo $first_name . " " . $last_name ?> </a>
-                </span>
-                <br>
+                </div>
                 <div class="caption-description">
                     <?php echo $desc; ?>
                 </div>

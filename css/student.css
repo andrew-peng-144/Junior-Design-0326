@@ -49,3 +49,11 @@ a, a:hover, a:focus, a:active{
 #edit-button {
     float:right; font-size: 20px; background-color:#FF5335; border-radius: 10px; padding: 10px; cursor: pointer;
 }
+
+.truncated-description {
+    /* white-space: nowrap;
+    text-overflow: ellipsis; */
+    overflow: hidden;
+    max-height: 35px;
+    font-size: 12px;
+}

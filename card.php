@@ -38,7 +38,9 @@ function card_display_profile($student_id, $path_to_portrait, $first_name, $last
                     <div class="card-body">
                         <h5 class="card-title"> <?php echo htmlspecialchars($first_name ). " " . htmlspecialchars($last_name) ?></h5>
                         <p class="card-text">Student Profile</p>
-                        <p class="card-text truncated-description"><?php echo $bio ?></p>
+                        <div class="card-text truncated-description">
+                            <?php echo $bio; ?>
+                        </div>
                     </div>
                 </div>
             </a>
@@ -79,7 +81,9 @@ function card_display_project($project_id, $path_to_cover_image, $title, $first_
                     <div class="card-body">
                         <h5 class="card-title"><?php echo htmlspecialchars($title) ?></h5>
                         <p class="card-text">by <?php echo htmlspecialchars($first_name) . " " . htmlspecialchars($last_name) ?></p>
-                        <p class="card-text truncated-description"><?php echo $desc ?></p>
+                        <div class="card-text truncated-description">
+                            <?php echo $desc; ?>
+                        </div>
                     </div>
                 </div>
             </a>

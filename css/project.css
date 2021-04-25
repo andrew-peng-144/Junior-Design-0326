@@ -74,3 +74,11 @@ a:active {
     padding: 10px;
     width: 40%;
 }
+
+.truncated-description {
+    /* white-space: nowrap;
+    text-overflow: ellipsis; */
+    overflow: hidden;
+    max-height: 35px;
+    font-size: 12px;
+}
