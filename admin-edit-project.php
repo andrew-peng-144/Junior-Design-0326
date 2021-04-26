@@ -170,6 +170,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //delete '/files' folder itself
             rmdir($folder);
             $status_messages .= "This project's \"files\" folder has been deleted. <br>";
+
+            //delete the entry in the project_files table
+            $sql = "DELETE from project_files where project_files.project_id=" . $project_id;
+            if ($conn->query($sql) === TRUE) {
+                echo "Project files record deleted successfully";
+            } else {
+                echo "Error deleting record: " . $conn->error;
+            }     
         }
 
         //for each new file, up to 3, put the file into the folder 'data/pro/<id>/files/'
