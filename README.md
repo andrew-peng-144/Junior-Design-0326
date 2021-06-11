@@ -95,24 +95,25 @@ Now we need the WAMPserver to host the code from the Github repo.
 - Copy the code from the repository and paste it into that new directory. So, the path for `index.php`  on your filesystem should be `wamp64/www/cgaprojectshowcase/index.php`.
 - Alternatively, you could have cloned the repository directly into `cgaprojectshowcase`. This could be more convenient when editing the code, as it skips the copy and pasting every time you want to push a change to the repo.
 
-The WAMPserver now hosts the code for the website. However, the MariaDB database has not been set-up yet, so if we tried to access the site, it would throw errors because there are no tables in the database yet. Let’s first run the site to see if it works on the WAMPserver, then we’ll set up the database.
+The WAMPserver now hosts the code for the website. However, the MySQL database has not been set-up yet, so if we tried to access the site, it would throw errors because there are no tables in the database yet. Let’s first run the site to see if it works on the WAMPserver, then we’ll set up the database.
 
 
 ### Running the Application:
 - Navigate to the `wamp64` folder and double-click `wampmanager.exe`. This starts the WAMPserver.
 - In a web browser, navigate to the page `localhost/cgaprojectshowcase`
 It should take you to the homepage. But it will throw some errors because there are no tables in the database yet.
+- There should now be an icon on the bottom right of your screen (assuming you have Windows 10) that looks like a W with a square around it.
 
-
-**MariaDB Database Tables setup**
-
-- Access the MariaDB console: Left-click -> MariaDB -> MariaDB Console
+**MySQL Database Tables setup**
+- Left click the W icon on the bottom right of your screen, to access a dropdown menu of WAMPserver services.
+- Access the MySQL console: Left-click -> MySQL -> MySQL Console
 - Just enter `root` as username, and enter nothing for password.
 - Enter command `CREATE DATABASE cga_showcase;`
+- Enter command `USE cga_showcase;`
 - Under the `dev-test` folder, open `create-tables.txt`. It contains four SQL commands to create the four tables for the database. Run all four commands.
 - Under the `dev-test` folder, open `add-test-admin.txt`. Under the dashed line, there is the SQL command to add an admin to the `admins` table. It uses placeholder credentials for testing purposes. Run the command.
 
-**MariaDB User setup**
+**MySQL User setup**
 
 - Note that having these users is mainly for organizational purposes. They are not strictly necessary for security because only the server-side itself is directly connecting to the database. Site visitors don’t directly access the database; rather, the PHP code (that runs for each site visitor) is executed by the server and connects to the database itself.
 
@@ -144,7 +145,7 @@ This section briefly mentions how to generate a hashed password for the admin ac
 
 In the `admins` table for both the WAMPserver and the live AWS server, the `password` column stores a hashed password for the admin user. So, you can `UPDATE` the `admins` table on either server if you want to change the password or username.
 
-**Please feel free to change any placeholder credentials mentioned in this document. This also includes the passwords for MariaDB users that were created from the commands in `create-db-users.txt`**
+**Please feel free to change any placeholder credentials mentioned in this document. This also includes the passwords for MySQL users that were created from the commands in `create-db-users.txt`**
 
 # Deployment Guide
 
