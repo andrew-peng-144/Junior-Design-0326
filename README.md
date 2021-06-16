@@ -155,7 +155,7 @@ Certain files and credentials vital to deployment will be needed. Before you sta
 
 ### Give SSH access to your IP
 
-First, you need to allow your computer to run commands on the webserver in order to transfer files.
+First, you need to allow your computer to run commands on the webserver in order to transfer files. The following steps will accomplish that.
 1. Log into Amazon Web Services (AWS). Please contact Dr. Jonathan Shelley for the credentials.
 2. After you have signed in, navigate to the EC2 console https://console.aws.amazon.com/ec2/v2/
 3. Click on “Instances”.
@@ -181,7 +181,7 @@ PuTTY will be used for running commands on the live server:
 2. Run PuTTY
 3. For the host name, put `ec2-user@cgaprojectshowcase.com`. ec2-user has sudo access.
 4. Connection type, put SSH.
-5. On the Category panel on the left, navigate to Connection -> SSH -> Auth. Click on “Browse”, then select the `.ppk` file.
+5. On the Category panel on the left, navigate to Connection -> SSH -> Auth. Click on "Auth". Then on the right, click on “Browse”, then select the `.ppk` file.
 6. On the Category panel, click “Session”, enter a name for the session in Saved Sessions, and then click “Save”.
 7. Click “Open” to connect to the server.
 8. If successful, you should now be able to run Linux commands on the server.
@@ -208,7 +208,7 @@ WinSCP will be used for transferring files to the live server:
 4. Click on “Advanced”, then click “Authentication” on the left, then where it says Private Key File, browse for the `.ppk` file.
 5. Click “Save” to save these settings
 6. Click “Login”
-7. If successful, you should see a filesystem on the left and on the right. You should now be able to drag files from your computer (left) to the server (right).
+7. If successful, you should see a filesystem on the left and on the right. You should now be able to drag files from your computer (left) to the server (right). The main website files are located at `/var/www/html`.
 
 The typical workflow is to work on some code, then save it, then manually drag the new code to the server filesystem.
 
@@ -219,6 +219,8 @@ From the Github repo, you can transfer any code to the server EXCEPT the folder 
 The password for admin is extremely important and if it gets leaked then all the content on the site risks getting deleted or vandalized since admins can remove and edit projects. So… in the case that the admin password gets leaked… a developer who setup the WAMPserver should generate a new password with `hash-gen.php` and come up with a new username, then edit the mysql table on the live server to have those new credentials. Then they need to restart everyone’s sessions… do this by deleting every file on the live server in /var/lib/php/session.
 
 # Amazon Web Services (AWS) Set-up Information
+
+The following are the steps that have already been followed. You do not need to follow these steps; it is just information about AWS
 
 From Amazon Web Services, we used:
 
