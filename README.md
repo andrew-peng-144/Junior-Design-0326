@@ -95,7 +95,7 @@ Now we need the WAMPserver to host the code from the Github repo.
 - Copy the code from the repository and paste it into that new directory. So, the path for `index.php`  on your filesystem should be `wamp64/www/cgaprojectshowcase/index.php`.
 - Alternatively, you could have cloned the repository directly into `cgaprojectshowcase`. This could be more convenient when editing the code, as it skips the copy and pasting every time you want to push a change to the repo.
 
-The WAMPserver now hosts the code for the website. However, the MariaDB database has not been set-up yet, so if we tried to access the site, it would throw errors because there are no tables in the database yet. Let’s first run the site to see if it works on the WAMPserver, then we’ll set up the database.
+The WAMPserver now hosts the code for the website. However, the MySQL database has not been set-up yet, so if we tried to access the site, it would throw errors because there are no tables in the database yet. Let’s first run the site to see if it works on the WAMPserver, then we’ll set up the database.
 
 
 ### Running the Application:
@@ -145,7 +145,7 @@ This section briefly mentions how to generate a hashed password for the admin ac
 
 In the `admins` table for both the WAMPserver and the live AWS server, the `password` column stores a hashed password for the admin user. So, you can `UPDATE` the `admins` table on either server if you want to change the password or username.
 
-**Please feel free to change any placeholder credentials mentioned in this document. This also includes the passwords for MariaDB users that were created from the commands in `create-db-users.txt`**
+**Please feel free to change any placeholder credentials mentioned in this document. This also includes the passwords for MySQL users that were created from the commands in `create-db-users.txt`**
 
 # Deployment Guide
 
@@ -155,7 +155,7 @@ Certain files and credentials vital to deployment will be needed. Before you sta
 
 ### Give SSH access to your IP
 
-First, you need to allow your computer to run commands on the webserver in order to transfer files.
+First, you need to allow your computer to run commands on the webserver in order to transfer files. The following steps will accomplish that.
 1. Log into Amazon Web Services (AWS). Please contact Dr. Jonathan Shelley for the credentials.
 2. After you have signed in, navigate to the EC2 console https://console.aws.amazon.com/ec2/v2/
 3. Click on “Instances”.
@@ -181,7 +181,7 @@ PuTTY will be used for running commands on the live server:
 2. Run PuTTY
 3. For the host name, put `ec2-user@cgaprojectshowcase.com`. ec2-user has sudo access.
 4. Connection type, put SSH.
-5. On the Category panel on the left, navigate to Connection -> SSH -> Auth. Click on “Browse”, then select the `.ppk` file.
+5. On the Category panel on the left, navigate to Connection -> SSH -> Auth. Click on "Auth". Then on the right, click on “Browse”, then select the `.ppk` file.
 6. On the Category panel, click “Session”, enter a name for the session in Saved Sessions, and then click “Save”.
 7. Click “Open” to connect to the server.
 8. If successful, you should now be able to run Linux commands on the server.
@@ -208,7 +208,7 @@ WinSCP will be used for transferring files to the live server:
 4. Click on “Advanced”, then click “Authentication” on the left, then where it says Private Key File, browse for the `.ppk` file.
 5. Click “Save” to save these settings
 6. Click “Login”
-7. If successful, you should see a filesystem on the left and on the right. You should now be able to drag files from your computer (left) to the server (right).
+7. If successful, you should see a filesystem on the left and on the right. You should now be able to drag files from your computer (left) to the server (right). The main website files are located at `/var/www/html`.
 
 The typical workflow is to work on some code, then save it, then manually drag the new code to the server filesystem.
 
@@ -219,6 +219,8 @@ From the Github repo, you can transfer any code to the server EXCEPT the folder 
 The password for admin is extremely important and if it gets leaked then all the content on the site risks getting deleted or vandalized since admins can remove and edit projects. So… in the case that the admin password gets leaked… a developer who setup the WAMPserver should generate a new password with `hash-gen.php` and come up with a new username, then edit the mysql table on the live server to have those new credentials. Then they need to restart everyone’s sessions… do this by deleting every file on the live server in /var/lib/php/session.
 
 # Amazon Web Services (AWS) Set-up Information
+
+The following are the steps that have already been followed. You do not need to follow these steps; it is just information about AWS
 
 From Amazon Web Services, we used:
 
